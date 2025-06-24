@@ -1,11 +1,12 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu, FiX } from "react-icons/fi";
 
 const Navbar = () => {
-  // 1. یک state برای مدیریت باز یا بسته بودن منو
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navLinks = [
@@ -15,7 +16,6 @@ const Navbar = () => {
     { name: "Contact", url: "#contact" },
   ];
 
-  // این افکت، اسکرول صفحه اصلی رو وقتی منوی موبایل بازه، قفل می‌کنه
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -28,11 +28,14 @@ const Navbar = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-navy/80 backdrop-blur-sm shadow-md">
       <nav className="flex items-center justify-between max-w-screen-xl mx-auto px-6 py-4">
         {/* Logo */}
-        <Link
-          href="/"
-          className="text-green w-10 h-10 flex items-center justify-center border-2 border-green rounded-full font-bold text-xl hover:bg-green/10 transition-colors z-50"
-        >
-          A
+        <Link href="/" className="z-50">
+          <Image
+            src="/logo.png"
+            alt="Ali Firozmand Logo"
+            width={40}
+            height={40}
+            className="rounded-full"
+          />
         </Link>
 
         {/* Desktop Navigation Links */}
@@ -70,7 +73,7 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Mobile Menu Panel (using AnimatePresence for smooth exit) */}
+        {/* Mobile Menu Panel */}
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
@@ -87,7 +90,7 @@ const Navbar = () => {
                     className="text-lg text-lightest-slate hover:text-green transition-colors"
                   >
                     <Link href={link.url} onClick={() => setIsMenuOpen(false)}>
-                      <span className="block text-green font-mono mb-1">
+                      <span className="text-green font-mono mr-2">
                         0{index + 1}.
                       </span>
                       {link.name}

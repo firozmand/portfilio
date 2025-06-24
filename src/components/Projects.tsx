@@ -5,22 +5,37 @@ import { FiGithub, FiExternalLink } from "react-icons/fi";
 // ۱. داده‌های مربوط به پروژه‌ها
 const projectsData = [
   {
-    title: "Portfolio Website v1",
+    title: "Finomate",
     description:
-      "A personal portfolio website to showcase my skills and projects. Built with Next.js and Tailwind CSS, following modern design trends. It is fully responsive and interactive.",
-    tech: ["Next.js", "React", "Tailwind CSS", "TypeScript"],
-    githubLink: "https://github.com/firozmand", // Replace with your actual repo link
-    liveLink: "#", // Replace with your actual live link
-    image: "/project1.png", // Ensure this image is in your /public folder
+      "The core charting and analysis microservice for the Finomate platform. I developed this service to deliver high-performance, interactive visualizations of cryptocurrency and financial market data, enabling traders and investors to identify trends and make informed decisions.",
+    tech: [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Stripe API",
+      "Framer Motion",
+    ],
+    githubLink: "https://github.com/firozmand",
+    liveLink: "https://chart.finomate.io/",
+    image: "/finomate-project.png",
   },
   {
-    title: "E-commerce Platform",
+    title: "Amlak Daran",
     description:
-      "A full-featured e-commerce application with product listings, a shopping cart, and a checkout process. Integrated with a headless CMS for product management.",
-    tech: ["Vue.js", "Nuxt.js", "Stripe", "Sanity.io"],
-    githubLink: "https://github.com/firozmand",
-    liveLink: "#",
-    image: "/project2.png", // Ensure this image is in your /public folder
+      "I developed Amlak Daran, a comprehensive real estate platform using Vue.js, Nuxt.js, and Tailwind CSS. The site provides a complete suite of services including property sales, rentals, and a unique property exchange (bartering) feature.",
+    tech: ["Vue.js", "Nuxt.js", "Tailwind CSS", "JavaScript"],
+    githubLink: "https://github.com/firozmand/AmlakDaran",
+    liveLink: "https://amlakdaran.com/",
+    image: "/amlak-daran.png",
+  },
+  {
+    title: "Finomate Landing Page",
+    description:
+      "The landing page for Finomate, an AI-powered trading assistant for the crypto market. This platform is engineered to streamline technical analysis, providing traders with faster, more precise, and professional insights.",
+    tech: ["Next.js", "Tailwind CSS", "Redux Toolkit", "MongoDB"],
+    githubLink: "https://github.com/firozmand/", 
+    liveLink: "https://land.finomate.io/",
+    image: "/finomate-land.png",
   },
 ];
 
