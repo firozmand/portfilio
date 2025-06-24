@@ -8,7 +8,7 @@ const jobsData = [
     company: "Tech Solutions Inc.",
     title: "Front-End Developer",
     range: "May 2022 - Present",
-    url: "https://www.google.com", // A sample link
+    url: "https://www.google.com",
     duties: [
       "Developed and maintained user-facing features using modern front-end technologies like React and Next.js.",
       "Collaborated with designers and back-end developers to create seamless and responsive web applications.",
@@ -21,7 +21,7 @@ const jobsData = [
     company: "Creative Minds LLC",
     title: "Junior Front-End Developer",
     range: "Jan 2021 - Apr 2022",
-    url: "https://www.google.com", // A sample link
+    url: "https://www.google.com",
     duties: [
       "Assisted in the development of websites and web applications from concept to deployment.",
       "Translated UI/UX design wireframes to actual code that will produce visual elements of the application.",
@@ -31,10 +31,7 @@ const jobsData = [
 ];
 
 const Experience = () => {
-  // ۲. یک state برای نگه داشتن شماره تب فعال تعریف می‌کنیم. مقدار اولیه 0 یعنی اولین شغل به صورت پیش‌فرض انتخاب شده.
   const [activeTab, setActiveTab] = useState(0);
-
-  // ۳. اطلاعات شغل فعال رو بر اساس state انتخاب می‌کنیم
   const activeJob = jobsData[activeTab];
 
   return (
@@ -46,15 +43,17 @@ const Experience = () => {
 
       <div className="md:flex">
         {/* لیست تب‌ها (شرکت‌ها) */}
-        <div className="flex overflow-x-auto md:flex-col md:mr-8 mb-8 md:mb-0">
+        {/* 👇 تغییر اصلی اینجاست: overflow-x-auto به flex-wrap تغییر کرد */}
+        <div className="flex flex-wrap md:flex-col md:mr-8 mb-8 md:mb-0">
           {jobsData.map((job, index) => (
             <button
               key={job.id}
               onClick={() => setActiveTab(index)}
-              className={`px-4 py-3 w-full text-left whitespace-nowrap hover:bg-light-navy hover:text-green focus:outline-none transition-all duration-300 ${
+              // 👇 تغییر اصلی اینجاست: کلاس whitespace-nowrap حذف شد
+              className={`px-4 py-3 w-auto md:w-full text-left focus:outline-none transition-all duration-300 ${
                 activeTab === index
                   ? "text-green border-b-2 md:border-b-0 md:border-l-2 border-green bg-light-navy"
-                  : "text-slate border-b-2 md:border-b-0 md:border-l-2 border-lightest-navy"
+                  : "text-slate border-b-2 md:border-b-0 md:border-l-2 border-transparent md:border-lightest-navy hover:bg-light-navy hover:text-green"
               }`}
             >
               {job.company}

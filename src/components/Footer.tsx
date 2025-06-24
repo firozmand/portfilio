@@ -5,7 +5,7 @@ import { FiGithub, FiLinkedin, FiInstagram } from "react-icons/fi";
 const Footer = () => {
   return (
     <footer className="text-center py-6 text-slate">
-      {/* این آیکون‌ها فعلاً در فوتر هستن و بعداً به کنار صفحه منتقلشون می‌کنیم */}
+      {/* این div فقط در موبایل و تبلت نمایش داده میشه */}
       <div className="flex items-center justify-center space-x-6 md:hidden mb-4">
         <a
           href="https://github.com/firozmand"
