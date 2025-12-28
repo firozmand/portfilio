@@ -4,6 +4,7 @@ import type { Profile, Project, Skill, ThemeConfig } from "@prisma/client";
 
 // Profile
 export const getProfile = cache(async (): Promise<Profile | null> => {
+  if (!prisma) return null; // No DB available
   const profile = await prisma.profile.findFirst();
   return profile;
 });
@@ -13,6 +14,7 @@ export const getProjects = cache(
   async (): Promise<
     (Omit<Project, "techStack"> & { techStack: string[] })[]
   > => {
+    if (!prisma) return []; // No DB available
     const projects = await prisma.project.findMany({
       where: { isVisible: true },
       orderBy: { order: "asc" },
@@ -29,6 +31,7 @@ export const getAllProjects = cache(
   async (): Promise<
     (Omit<Project, "techStack"> & { techStack: string[] })[]
   > => {
+    if (!prisma) return []; // No DB available
     const projects = await prisma.project.findMany({
       orderBy: { order: "asc" },
     });
@@ -44,6 +47,7 @@ export const getProjectById = cache(
   async (
     id: string
   ): Promise<(Omit<Project, "techStack"> & { techStack: string[] }) | null> => {
+    if (!prisma) return null; // No DB available
     const project = await prisma.project.findUnique({
       where: { id },
     });
@@ -59,6 +63,7 @@ export const getProjectById = cache(
 
 // Skills
 export const getSkills = cache(async (): Promise<Skill[]> => {
+  if (!prisma) return []; // No DB available
   const skills = await prisma.skill.findMany({
     orderBy: { order: "asc" },
   });
@@ -67,6 +72,7 @@ export const getSkills = cache(async (): Promise<Skill[]> => {
 
 export const getSkillsByCategory = cache(
   async (): Promise<Record<string, Skill[]>> => {
+    if (!prisma) return {}; // No DB available
     const skills = await prisma.skill.findMany({
       orderBy: [{ category: "asc" }, { order: "asc" }],
     });
@@ -89,6 +95,7 @@ export const getSkillsByCategory = cache(
 
 // Theme
 export const getThemeConfig = cache(async (): Promise<ThemeConfig | null> => {
+  if (!prisma) return null; // No DB available
   const theme = await prisma.themeConfig.findFirst();
   return theme;
 });
