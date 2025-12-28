@@ -65,7 +65,7 @@ export default function AdminDashboard() {
           <li>Keep your Profile up to date.</li>
           <li>Set project visibility and order for best presentation.</li>
           <li>Use accurate skill levels (0–100).</li>
-          <li>Provide hex colors for theme fields (e.g. #64ffda).</li>
+          <li>Provide hex colors for theme fields (e.g. #64ffda)</li>
         </ul>
       </div>
     </div>
