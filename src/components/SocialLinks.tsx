@@ -14,7 +14,7 @@ const SocialLinks = () => {
   ];
 
   return (
-    <>
+    <div className="site-sociallinks">
       {/* نوار سمت چپ (آیکون‌های اجتماعی) */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -29,15 +29,16 @@ const SocialLinks = () => {
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-slate hover:text-green hover:-translate-y-1 transition-all duration-300"
+                className="group relative block rounded-full border border-[var(--border-subtle)] bg-[var(--surface)] p-3 text-[var(--text-secondary)] shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:text-green"
               >
                 {link.icon}
+                <span className="pointer-events-none absolute inset-0 rounded-full bg-[color-mix(in_srgb,var(--color-primary)_12%,transparent)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               </a>
             </li>
           ))}
         </ul>
         {/* خط عمودی */}
-        <div className="w-px h-24 bg-slate mt-6"></div>
+        <div className="w-px h-24 bg-[var(--border-subtle)] mt-6"></div>
       </motion.div>
 
       {/* نوار سمت راست (ایمیل) */}
@@ -49,15 +50,15 @@ const SocialLinks = () => {
       >
         <a
           href="mailto:firozmand.dev@gmail.com"
-          className="font-mono text-sm tracking-widest text-slate hover:text-green hover:-translate-y-1 transition-all duration-300"
+          className="font-mono text-sm tracking-[0.28em] text-[var(--text-secondary)] hover:text-green hover:-translate-y-1 transition-all duration-300"
           style={{ writingMode: "vertical-rl" }}
         >
           firozmand.dev@gmail.com
         </a>
         {/* خط عمودی */}
-        <div className="w-px h-24 bg-slate mt-6"></div>
+        <div className="w-px h-24 bg-[var(--border-subtle)] mt-6"></div>
       </motion.div>
-    </>
+    </div>
   );
 };
 

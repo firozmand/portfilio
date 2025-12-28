@@ -1,5 +1,3 @@
-"use client";
-
 import About from "../components/About";
 import Hero from "../components/Hero";
 import Experience from "@/components/Experience";
@@ -11,7 +9,7 @@ import SectionWrapper from "@/components/SectionWrapper";
 
 export default function Home() {
   return (
-    <main className="mx-auto max-w-screen-xl px-6 md:px-12 lg:px-24">
+    <main className="mx-auto max-w-screen-2xl px-5 sm:px-8 lg:px-12 xl:px-16 pt-32 pb-16 space-y-16">
       <Hero />
       <SectionWrapper>
         <About />

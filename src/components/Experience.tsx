@@ -1,91 +1,55 @@
-"use client";
+import { getSkillsByCategory } from "@/lib/data";
 
-import { useState, useEffect } from "react";
+const Experience = async () => {
+  const groupedSkills = await getSkillsByCategory();
+  const categories = Object.keys(groupedSkills);
 
-const jobsData = [
-  {
-    id: 0,
-    company: "Tech Solutions Inc.",
-    title: "Front-End Developer",
-    range: "May 2022 - Present",
-    url: "https://www.google.com",
-    duties: [
-      "Developed and maintained user-facing features using modern front-end technologies like React and Next.js.",
-      "Collaborated with designers and back-end developers to create seamless and responsive web applications.",
-      "Optimized components for maximum performance across a vast array of web-capable devices and browsers.",
-      "Wrote clean, maintainable, and well-documented code.",
-    ],
-  },
-  {
-    id: 1,
-    company: "Creative Minds LLC",
-    title: "Junior Front-End Developer",
-    range: "Jan 2021 - Apr 2022",
-    url: "https://www.google.com",
-    duties: [
-      "Assisted in the development of websites and web applications from concept to deployment.",
-      "Translated UI/UX design wireframes to actual code that will produce visual elements of the application.",
-      "Learned and applied new technologies and best practices in web development.",
-    ],
-  },
-];
-
-const Experience = () => {
-  const [activeTab, setActiveTab] = useState(0);
-  const activeJob = jobsData[activeTab];
+  if (!categories.length) return null;
 
   return (
     <section id="experience" className="py-24">
-      <h2 className="text-2xl font-bold text-lightest-slate mb-8">
-        <span className="text-green font-mono mr-2">02.</span>
-        Where I’ve Worked
-      </h2>
-
-      <div className="md:flex">
-        {/* لیست تب‌ها (شرکت‌ها) */}
-        {/* 👇 تغییر اصلی اینجاست: overflow-x-auto به flex-wrap تغییر کرد */}
-        <div className="flex flex-wrap md:flex-col md:mr-8 mb-8 md:mb-0">
-          {jobsData.map((job, index) => (
-            <button
-              key={job.id}
-              onClick={() => setActiveTab(index)}
-              // 👇 تغییر اصلی اینجاست: کلاس whitespace-nowrap حذف شد
-              className={`px-4 py-3 w-auto md:w-full text-left focus:outline-none transition-all duration-300 ${
-                activeTab === index
-                  ? "text-green border-b-2 md:border-b-0 md:border-l-2 border-green bg-light-navy"
-                  : "text-slate border-b-2 md:border-b-0 md:border-l-2 border-transparent md:border-lightest-navy hover:bg-light-navy hover:text-green"
-              }`}
-            >
-              {job.company}
-            </button>
-          ))}
+      <div className="mb-10 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <span className="text-green font-mono text-sm">02.</span>
+          <h2 className="text-3xl font-semibold text-[var(--text-primary)]">
+            Skills & Experience
+          </h2>
         </div>
+        <div className="hidden sm:block h-px w-32 bg-gradient-to-r from-transparent via-[var(--border-strong)] to-transparent" />
+      </div>
 
-        {/* محتوای تب فعال */}
-        <div className="min-h-[300px]">
-          <h3 className="text-xl font-bold text-lightest-slate">
-            {activeJob.title}{" "}
-            <a
-              href={activeJob.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-green"
-            >
-              @ {activeJob.company}
-            </a>
-          </h3>
-          <p className="text-sm mt-1 mb-6 font-mono">{activeJob.range}</p>
-          <ul className="space-y-3">
-            {activeJob.duties.map((duty, i) => (
-              <li
-                key={i}
-                className="relative ps-5 before:content-['▹'] before:absolute before:start-0 before:text-green"
-              >
-                {duty}
-              </li>
-            ))}
-          </ul>
-        </div>
+      <div className="grid gap-6 md:grid-cols-2">
+        {categories.map((category) => (
+          <div
+            key={category}
+            className="glass-panel p-6 shadow-[var(--shadow-card)]"
+          >
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-xl font-semibold text-[var(--text-primary)]">
+                {category}
+              </h3>
+              <span className="text-xs font-mono uppercase tracking-[0.12em] text-secondary">
+                {groupedSkills[category].length} items
+              </span>
+            </div>
+            <ul className="space-y-4">
+              {groupedSkills[category].map((skill) => (
+                <li key={skill.id} className="space-y-2">
+                  <div className="flex items-center justify-between text-sm font-medium text-[var(--text-primary)]">
+                    <span>{skill.name}</span>
+                    <span className="text-secondary">{skill.level}%</span>
+                  </div>
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-[var(--surface)] border border-[var(--border-subtle)]">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-[color-mix(in_srgb,var(--color-primary)_70%,transparent)] via-[color-mix(in_srgb,var(--color-primary)_50%,transparent)] to-[color-mix(in_srgb,var(--color-primary)_30%,transparent)] shadow-[0_10px_30px_rgba(100,255,218,0.25)]"
+                      style={{ width: `${skill.level}%` }}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </section>
   );

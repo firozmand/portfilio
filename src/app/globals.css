@@ -3,11 +3,457 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --color-primary: #64ffda;
+    --color-accent: #0a192f;
+
+    /* Dark theme defaults */
+    --bg: #040813;
+    --bg-muted: #070e1f;
+    --surface: rgba(255, 255, 255, 0.04);
+    --surface-strong: rgba(255, 255, 255, 0.09);
+    --glass: linear-gradient(140deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+    --text-primary: #e9edf5;
+    --text-secondary: #b6c1d8;
+    --muted: #7f8ba5;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.16);
+    --shadow-soft: 0 12px 45px rgba(6, 11, 30, 0.55);
+    --shadow-card: 0 28px 80px rgba(2, 6, 23, 0.48);
+    --blur-strength: 18px;
+  }
+
   html {
     scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-navy text-slate;
+    min-height: 100vh;
+    background: radial-gradient(circle at 10% 20%, rgba(100, 255, 218, 0.12), transparent 30%),
+      radial-gradient(circle at 90% 10%, rgba(100, 181, 255, 0.12), transparent 28%),
+      radial-gradient(circle at 30% 80%, rgba(255, 255, 255, 0.07), transparent 24%),
+      var(--bg);
+    color: var(--text-primary);
+    transition: background-color 0.35s ease, color 0.35s ease;
+  }
+
+  body,
+  .glass-panel,
+  .glass-card,
+  .surface-soft,
+  .surface-strong {
+    transition-property: background-color, color, border-color, box-shadow;
+    transition-duration: 0.35s;
+    transition-timing-function: ease;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+
+  p,
+  span,
+  li,
+  label {
+    color: var(--text-secondary);
+  }
+}
+
+/* Override key utility colors with theme variables */
+.text-green {
+  color: var(--color-primary) !important;
+}
+
+.border-green {
+  border-color: var(--color-primary) !important;
+}
+
+.bg-navy {
+  background-color: var(--color-accent) !important;
+}
+
+.hover\:bg-green\/10:hover {
+  background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+/* Glass + utility tokens */
+.glass-panel {
+  background: var(--glass);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(var(--blur-strength)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--blur-strength)) saturate(140%);
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card {
+  background: var(--glass);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(var(--blur-strength)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--blur-strength)) saturate(140%);
+  border-radius: 18px;
+}
+
+.glass-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.18), transparent 32%);
+  pointer-events: none;
+}
+
+.surface-soft {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+}
+
+.surface-strong {
+  background: var(--surface-strong);
+  border: 1px solid var(--border-strong);
+  border-radius: 18px;
+}
+
+.muted-border {
+  border-color: var(--border-subtle) !important;
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.gradient-accent {
+  background: linear-gradient(120deg, color-mix(in srgb, var(--color-primary) 30%, transparent),
+      color-mix(in srgb, var(--color-primary) 8%, transparent));
+}
+
+.soft-shadow {
+  box-shadow: var(--shadow-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Admin night-mode system */
+.admin-wrapper {
+  --admin-bg: #040712;
+  --admin-surface: rgba(255, 255, 255, 0.04);
+  --admin-surface-strong: rgba(255, 255, 255, 0.08);
+  --admin-border: rgba(255, 255, 255, 0.08);
+  --admin-border-strong: rgba(255, 255, 255, 0.16);
+  --admin-text: #f5f8ff;
+  --admin-text-secondary: #c9d5f2;
+  --admin-muted: #8fa2c7;
+  --admin-shadow: 0 20px 50px rgba(3, 6, 18, 0.6);
+  --admin-shadow-soft: 0 10px 32px rgba(3, 6, 18, 0.45);
+  --admin-glass: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  background: radial-gradient(circle at 10% 10%, color-mix(in srgb, var(--theme-primary, #64ffda) 20%, transparent), transparent 28%),
+    radial-gradient(circle at 90% 0%, color-mix(in srgb, var(--theme-accent, #0a192f) 25%, transparent), transparent 24%),
+    radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.06), transparent 30%),
+    #030613;
+  color: var(--admin-text);
+}
+
+.admin-wrapper h1,
+.admin-wrapper h2,
+.admin-wrapper h3,
+.admin-wrapper h4,
+.admin-wrapper h5,
+.admin-wrapper h6 {
+  color: var(--admin-text);
+  letter-spacing: -0.01em;
+}
+
+.admin-wrapper p,
+.admin-wrapper span,
+.admin-wrapper li,
+.admin-wrapper label {
+  color: var(--admin-text-secondary);
+}
+
+.admin-shell {
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  background: var(--admin-glass);
+  border: 1px solid var(--admin-border);
+  border-radius: 20px;
+  box-shadow: var(--admin-shadow);
+}
+
+.admin-card {
+  /* Refined liquid glass card */
+  background: linear-gradient(180deg, color-mix(in srgb, var(--admin-surface) 92%, rgba(255, 255, 255, 0.02)), color-mix(in srgb, var(--admin-surface-strong) 60%, rgba(255, 255, 255, 0.02)));
+  border: 1px solid color-mix(in srgb, var(--admin-border) 90%, transparent);
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(3, 6, 18, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.admin-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 60px rgba(3, 6, 18, 0.55);
+  border-color: color-mix(in srgb, var(--theme-primary, var(--color-primary)) 28%, var(--admin-border));
+}
+
+.admin-card:active {
+  transform: translateY(-2px);
+}
+
+.admin-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--admin-border), transparent);
+}
+
+.admin-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--admin-text);
+  margin-bottom: 0.35rem;
+}
+
+.admin-input,
+.admin-textarea,
+.admin-select {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--admin-border);
+  background: color-mix(in srgb, var(--admin-surface) 90%, transparent);
+  color: var(--admin-text);
+  padding: 0.85rem 1rem;
+  box-shadow: var(--admin-shadow-soft);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.admin-input:focus,
+.admin-textarea:focus,
+.admin-select:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--color-primary) 60%, var(--admin-border-strong));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 24%, transparent);
+  transform: translateY(-1px);
+}
+
+/* Inputs with left icons: provide extra left padding so placeholder doesn't overlap icon */
+.admin-input.icon-left {
+  padding-left: 3.5rem;
+  /* 56px - matches pl-14 */
+}
+
+
+.admin-helper {
+  font-size: 0.85rem;
+  color: var(--admin-muted);
+  margin-top: 0.35rem;
+}
+
+.admin-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 14px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.admin-button.primary {
+  background: linear-gradient(120deg, color-mix(in srgb, var(--color-primary) 92%, #0b1b2f 10%), color-mix(in srgb, var(--color-primary) 70%, #0b1b2f 30%));
+  color: #041225;
+  box-shadow: 0 14px 35px rgba(100, 255, 218, 0.28);
+}
+
+.admin-button.secondary {
+  background: var(--admin-surface-strong);
+  border-color: var(--admin-border);
+  color: var(--admin-text);
+}
+
+.admin-button.ghost {
+  background: transparent;
+  border-color: var(--admin-border);
+  color: var(--admin-text);
+}
+
+.admin-button.danger {
+  background: linear-gradient(120deg, #ff6b6b, #f53b57);
+  color: #13060a;
+  box-shadow: 0 12px 30px rgba(245, 59, 87, 0.32);
+}
+
+.admin-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+}
+
+.admin-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-alert {
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--admin-border);
+  background: var(--admin-glass);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  box-shadow: var(--admin-shadow-soft);
+  font-weight: 500;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  animation: slideInFromTop 0.3s ease-out;
+}
+
+.admin-alert.success {
+  border-color: color-mix(in srgb, var(--color-primary) 50%, var(--admin-border));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 8%, var(--admin-glass)), color-mix(in srgb, var(--color-primary) 4%, var(--admin-glass)));
+  color: var(--admin-text);
+}
+
+.admin-alert.error {
+  border-color: rgba(255, 99, 132, 0.5);
+  background: linear-gradient(135deg, rgba(255, 99, 132, 0.08), rgba(255, 99, 132, 0.04));
+  color: #ffccd5;
+}
+
+.admin-alert.warning {
+  border-color: rgba(255, 193, 7, 0.5);
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.08), rgba(255, 193, 7, 0.04));
+  color: #fff3cd;
+}
+
+.admin-alert.info {
+  border-color: rgba(13, 202, 240, 0.5);
+  background: linear-gradient(135deg, rgba(13, 202, 240, 0.08), rgba(13, 202, 240, 0.04));
+  color: #cff4fc;
+}
+
+.admin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid var(--admin-border);
+  background: var(--admin-surface);
+  color: var(--admin-text-secondary);
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--admin-shadow-soft);
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 0.9rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--admin-border);
+  color: var(--admin-text-secondary);
+}
+
+.admin-table th {
+  color: var(--admin-text);
+  font-weight: 700;
+  background: color-mix(in srgb, var(--admin-surface-strong) 85%, transparent);
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-kpi {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.admin-kpi .label {
+  font-size: 0.85rem;
+  color: var(--admin-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.admin-kpi .value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+/* Hide site chrome (header/footer) when on admin routes */
+body[data-path^="/admin"] .site-navbar {
+  display: none !important;
+}
+
+body[data-path^="/admin"] .site-sociallinks {
+  display: none !important;
+}
+
+/* Admin animations */
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
 }

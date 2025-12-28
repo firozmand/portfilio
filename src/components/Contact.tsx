@@ -1,23 +1,44 @@
-import React from "react";
+import { getProfile } from "@/lib/data";
 
-const Contact = () => {
+const Contact = async () => {
+  const profile = await getProfile();
+  if (!profile) return null;
+
   return (
-    <section id="contact" className="max-w-xl mx-auto py-24 text-center">
-      <h2 className="text-lg text-green font-mono mb-4">04. What’s Next?</h2>
-      <h3 className="text-5xl font-bold text-lightest-slate mb-4">
-        Get In Touch
-      </h3>
-      <p className="text-slate mb-8">
-        Although I’m not currently looking for any new opportunities, my inbox
-        is always open. Whether you have a question or just want to say hi, I’ll
-        try my best to get back to you!
-      </p>
-      <a
-        href="mailto:firozmand.dev@gmail.com"
-        className="inline-block mt-4 px-8 py-4 border border-green text-green rounded hover:bg-green/10 transition-colors text-lg"
-      >
-        Say Hello
-      </a>
+    <section id="contact" className="py-24">
+      <div className="max-w-3xl mx-auto">
+        <div className="glass-panel relative overflow-hidden px-8 py-12 text-center shadow-[var(--shadow-card)]">
+          <div className="pointer-events-none absolute inset-0 opacity-60">
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--border-strong)] to-transparent" />
+            <div className="absolute left-1/2 top-6 h-36 w-36 -translate-x-1/2 rounded-full bg-[color-mix(in_srgb,var(--color-primary)_24%,transparent)] blur-3xl" />
+          </div>
+
+          <p className="text-sm font-mono uppercase tracking-[0.14em] text-green">
+            04. What’s next
+          </p>
+          <h3 className="mt-4 text-4xl font-semibold text-[var(--text-primary)]">
+            Let’s build something calm
+          </h3>
+          <p className="mt-4 text-lg leading-relaxed text-[var(--text-secondary)]">
+            {profile.shortBio ||
+              "Feel free to reach out if you want to collaborate or just say hello."}
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <a
+              href={`mailto:${profile.email}`}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--color-primary)_16%,transparent)] px-7 py-3 text-base font-semibold text-[var(--text-primary)] shadow-[var(--shadow-soft)] transition hover:-translate-y-0.5 hover:shadow-lg"
+            >
+              Say hello
+            </a>
+            <a
+              href="#projects"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface)] px-7 py-3 text-base font-semibold text-[var(--text-primary)] shadow-[var(--shadow-soft)] transition hover:-translate-y-0.5 hover:shadow-lg"
+            >
+              View projects
+            </a>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };
