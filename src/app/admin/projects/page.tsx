@@ -4,7 +4,8 @@ import DeleteProjectButton from "./DeleteProjectButton";
 import type { Project } from "@prisma/client";
 
 export default async function ProjectsPage() {
-  const projects: (Omit<Project, "techStack"> & { techStack: string[] })[] = await getAllProjects();
+  const projects: (Omit<Project, "techStack"> & { techStack: string[] })[] =
+    await getAllProjects();
 
   return (
     <div>

@@ -5,7 +5,8 @@ import { getProjects } from "@/lib/data";
 import type { Project } from "@prisma/client";
 
 const Projects = async () => {
-  const projects: (Omit<Project, "techStack"> & { techStack: string[] })[] = await getProjects();
+  const projects: (Omit<Project, "techStack"> & { techStack: string[] })[] =
+    await getProjects();
 
   const placeholderImage =
     "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='750' viewBox='0 0 1200 750'%3E%3Crect width='1200' height='750' fill='%230a192f'/%3E%3Ctext x='50%' y='50%' fill='%2364ffda' font-size='48' font-family='sans-serif' text-anchor='middle'%3EProject%3C/text%3E%3C/svg%3E";
