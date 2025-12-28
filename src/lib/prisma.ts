@@ -7,11 +7,11 @@ const globalForPrisma = globalThis as unknown as {
 // Prisma client is only created if DATABASE_URL is available,
 // preventing errors during build time when env vars may not be loaded.
 // This ensures Node.js runtime compatibility.
+// If DATABASE_URL is missing, prisma remains undefined, handled by data functions.
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL is required");
-}
+export const prisma: PrismaClient | undefined = process.env.DATABASE_URL
+  ? globalForPrisma.prisma ?? new PrismaClient()
+  : undefined;
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient();
-
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV !== "production" && prisma)
+  globalForPrisma.prisma = prisma;

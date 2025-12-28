@@ -16,6 +16,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       async authorize(credentials) {
         const { prisma } = await import("@/lib/prisma"); // Lazy import for Edge compatibility
         const bcrypt = await import("bcryptjs"); // Lazy import for Edge compatibility
+        if (!prisma) return null; // DB not available
         if (!credentials?.email || !credentials?.password) {
           return null;
         }

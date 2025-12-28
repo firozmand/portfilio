@@ -8,6 +8,9 @@ export default async function EditSkillPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  if (!prisma) {
+    notFound();
+  }
   const skill = await prisma.skill.findUnique({
     where: { id },
   });
