@@ -1,6 +1,9 @@
 import { getProfile, getSkills } from "@/lib/data";
 import type { Skill } from "@prisma/client";
 
+// Server component that fetches data at runtime in Node.js environment.
+// Data functions provide fallbacks if database is unavailable.
+
 const About = async () => {
   const [profile, skills] = await Promise.all([getProfile(), getSkills()]);
 

@@ -4,6 +4,8 @@ import { FiGithub, FiExternalLink } from "react-icons/fi";
 import { getProjects } from "@/lib/data";
 import type { Project } from "@prisma/client";
 
+// Server component in Node.js runtime, loading projects with database fallbacks.
+
 const Projects = async () => {
   const projects: (Omit<Project, "techStack"> & { techStack: string[] })[] =
     await getProjects();

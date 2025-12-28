@@ -1,6 +1,8 @@
 import { getSkillsByCategory } from "@/lib/data";
 import type { Skill } from "@prisma/client";
 
+// Server component running in Node.js runtime, fetching skills data with fallbacks.
+
 const Experience = async () => {
   const groupedSkills: Record<string, Skill[]> = await getSkillsByCategory();
   const categories = Object.keys(groupedSkills);

@@ -1,5 +1,8 @@
 "use server";
 
+// Server actions run in Node.js runtime, allowing use of Prisma, bcryptjs, fs, and path.
+// These are executed at runtime, not during build or static generation.
+
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
