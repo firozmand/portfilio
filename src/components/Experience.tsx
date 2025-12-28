@@ -1,7 +1,8 @@
 import { getSkillsByCategory } from "@/lib/data";
+import type { Skill } from "@prisma/client";
 
 const Experience = async () => {
-  const groupedSkills = await getSkillsByCategory();
+  const groupedSkills: Record<string, Skill[]> = await getSkillsByCategory();
   const categories = Object.keys(groupedSkills);
 
   if (!categories.length) return null;

@@ -1,7 +1,10 @@
+// This file configures NextAuth for authentication.
+// Prisma and bcryptjs are imported lazily inside the authorize function
+// to avoid importing Node.js dependencies in Edge Runtime (middleware).
+// The auth() function used in middleware does not execute authorize.
+
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { prisma } from "@/lib/prisma";
-import bcrypt from "bcryptjs";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -11,6 +14,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        const { prisma } = await import("@/lib/prisma"); // Lazy import for Edge compatibility
+        const bcrypt = await import("bcryptjs"); // Lazy import for Edge compatibility
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
@@ -23,7 +28,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null;
         }
 
-        const passwordMatch = await bcrypt.compare(
+        const passwordMatch = await bcrypt.default.compare(
           credentials.password as string,
           admin.password
         );

@@ -1,6 +1,8 @@
 import { getThemeConfig } from "@/lib/data";
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs"; // Ensure Node.js runtime for database access
+
 export async function GET() {
   try {
     const theme = await getThemeConfig();

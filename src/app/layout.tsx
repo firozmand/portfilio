@@ -15,6 +15,10 @@ export const metadata: Metadata = {
   description: "Portfolio of Ali Firozmand",
 };
 
+// This layout runs during prerender and does not execute database queries.
+// Theme config is loaded asynchronously with fallbacks to avoid build-time dependencies.
+// CSS variables are set with defaults if theme is unavailable.
+
 export default async function RootLayout({
   children,
 }: Readonly<{

@@ -1,15 +1,16 @@
 import { getProfile, getSkills } from "@/lib/data";
+import type { Skill } from "@prisma/client";
 
 const About = async () => {
   const [profile, skills] = await Promise.all([getProfile(), getSkills()]);
 
   if (!profile) return null;
 
-  const aboutParagraphs = profile.aboutMe
+  const aboutParagraphs: string[] = profile.aboutMe
     ? profile.aboutMe.split(/\n+/).filter(Boolean)
     : [];
 
-  const topSkills = skills.slice(0, 6);
+  const topSkills: Skill[] = skills.slice(0, 6);
 
   return (
     <section id="about" className="py-24">

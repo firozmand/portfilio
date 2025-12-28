@@ -1,9 +1,10 @@
 import { getSkills } from "@/lib/data";
 import Link from "next/link";
 import DeleteSkillButton from "./DeleteSkillButton";
+import type { Skill } from "@prisma/client";
 
 export default async function SkillsPage() {
-  const skills = await getSkills();
+  const skills: Skill[] = await getSkills();
 
   return (
     <div>

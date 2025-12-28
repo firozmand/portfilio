@@ -1,3 +1,7 @@
+// Data functions are designed to return null/empty data if Prisma is unavailable,
+// preventing errors during build time or when DATABASE_URL is missing.
+// All functions check for prisma existence before executing database queries.
+
 import { prisma } from "./prisma";
 import { cache } from "react";
 import type { Profile, Project, Skill, ThemeConfig } from "@prisma/client";
