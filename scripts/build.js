@@ -3,7 +3,29 @@ const fs = require('fs');
 
 // Load environment variables only in development
 if (!process.env.VERCEL && process.env.NODE_ENV !== 'production') {
-  require('dotenv').config({ path: '.env.local' });
+  try {
+    require('dotenv').config({ path: '.env.local' });
+  } catch (e) {
+    // If dotenv is not available, try to load .env.local manually
+    const fs = require('fs');
+    const path = require('path');
+    try {
+      const envPath = path.join(process.cwd(), '.env.local');
+      if (fs.existsSync(envPath)) {
+        const envContent = fs.readFileSync(envPath, 'utf8');
+        envContent.split('\n').forEach(line => {
+          const [key, ...valueParts] = line.split('=');
+          if (key && valueParts.length > 0) {
+            const value = valueParts.join('=').trim();
+            process.env[key.trim()] = value.replace(/^["']|["']$/g, '');
+          }
+        });
+        console.log('Loaded environment variables from .env.local');
+      }
+    } catch (fsError) {
+      console.log('Could not load .env.local file');
+    }
+  }
 }
 
 console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'Set' : 'Not set');
