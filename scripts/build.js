@@ -1,10 +1,14 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 
-// Load environment variables
-require('dotenv').config({ path: '.env.local' });
+// Load environment variables only in development
+if (!process.env.VERCEL && process.env.NODE_ENV !== 'production') {
+  require('dotenv').config({ path: '.env.local' });
+}
 
 console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'Set' : 'Not set');
+console.log('VERCEL:', process.env.VERCEL ? 'Yes' : 'No');
+console.log('NODE_ENV:', process.env.NODE_ENV);
 
 // Check if we're in production (Vercel sets this)
 const isProduction = process.env.NODE_ENV === 'production' ||

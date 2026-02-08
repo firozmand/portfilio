@@ -6,7 +6,11 @@ import SocialLinks from "@/components/SocialLinks";
 import SetBodyPath from "@/components/SetBodyPath";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  fallback: ["system-ui", "sans-serif"]
+});
 
 export const metadata: Metadata = {
   title: "Ali Firozmand | Front-End Developer",
