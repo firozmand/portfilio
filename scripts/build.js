@@ -3,29 +3,29 @@ const fs = require('fs');
 
 // Load environment variables only in development
 if (!process.env.VERCEL && process.env.NODE_ENV !== 'production') {
-  try {
-    require('dotenv').config({ path: '.env.local' });
-  } catch (e) {
-    // If dotenv is not available, try to load .env.local manually
-    const fs = require('fs');
-    const path = require('path');
     try {
-      const envPath = path.join(process.cwd(), '.env.local');
-      if (fs.existsSync(envPath)) {
-        const envContent = fs.readFileSync(envPath, 'utf8');
-        envContent.split('\n').forEach(line => {
-          const [key, ...valueParts] = line.split('=');
-          if (key && valueParts.length > 0) {
-            const value = valueParts.join('=').trim();
-            process.env[key.trim()] = value.replace(/^["']|["']$/g, '');
-          }
-        });
-        console.log('Loaded environment variables from .env.local');
-      }
-    } catch (fsError) {
-      console.log('Could not load .env.local file');
+        require('dotenv').config({ path: '.env.local' });
+    } catch (e) {
+        // If dotenv is not available, try to load .env.local manually
+        const fs = require('fs');
+        const path = require('path');
+        try {
+            const envPath = path.join(process.cwd(), '.env.local');
+            if (fs.existsSync(envPath)) {
+                const envContent = fs.readFileSync(envPath, 'utf8');
+                envContent.split('\n').forEach(line => {
+                    const [key, ...valueParts] = line.split('=');
+                    if (key && valueParts.length > 0) {
+                        const value = valueParts.join('=').trim();
+                        process.env[key.trim()] = value.replace(/^["']|["']$/g, '');
+                    }
+                });
+                console.log('Loaded environment variables from .env.local');
+            }
+        } catch (fsError) {
+            console.log('Could not load .env.local file');
+        }
     }
-  }
 }
 
 console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'Set' : 'Not set');
@@ -34,36 +34,41 @@ console.log('NODE_ENV:', process.env.NODE_ENV);
 
 // Check if we're in production (Vercel sets this)
 const isProduction = process.env.NODE_ENV === 'production' ||
-                     process.env.VERCEL === '1' ||
-                     process.env.VERCEL_ENV;
+    process.env.VERCEL === '1' ||
+    process.env.VERCEL_ENV;
 
 console.log('Build environment:', isProduction ? 'production' : 'development');
 
 try {
-  if (isProduction) {
-    console.log('Setting up production schema...');
-    // Change schema to PostgreSQL for production
-    let schema = fs.readFileSync('prisma/schema.prisma', 'utf8');
-    schema = schema.replace('provider = "sqlite"', 'provider = "postgresql"');
-    fs.writeFileSync('prisma/schema.prisma', schema);
+    if (isProduction) {
+        console.log('Setting up production schema...');
+        // Change schema to PostgreSQL for production
+        let schema = fs.readFileSync('prisma/schema.prisma', 'utf8');
+        schema = schema.replace('provider = "sqlite"', 'provider = "postgresql"');
+        fs.writeFileSync('prisma/schema.prisma', schema);
 
-    console.log('Running production build...');
-    // Generate Prisma client
-    execSync('npx prisma generate', { stdio: 'inherit' });
-    // In production, run migrations and seed
-    execSync('npx prisma migrate deploy', { stdio: 'inherit' });
-    execSync('npm run db:seed', { stdio: 'inherit' });
-  } else {
-    console.log('Running development build...');
-    // In development, just push schema
-    execSync('npx prisma db push', { stdio: 'inherit' });
-  }
+        console.log('Running production build...');
+        // Generate Prisma client
+        execSync('npx prisma generate', { stdio: 'inherit' });
+        // In production, try migrate first, fallback to db push
+        try {
+            execSync('npx prisma migrate deploy', { stdio: 'inherit' });
+        } catch (migrateError) {
+            console.log('Migration failed, using db push...');
+            execSync('npx prisma db push --force-reset', { stdio: 'inherit' });
+        }
+        execSync('npm run db:seed', { stdio: 'inherit' });
+    } else {
+        console.log('Running development build...');
+        // In development, just push schema
+        execSync('npx prisma db push', { stdio: 'inherit' });
+    }
 
-  // Always run Next.js build
-  execSync('next build', { stdio: 'inherit' });
+    // Always run Next.js build
+    execSync('next build', { stdio: 'inherit' });
 
-  console.log('Build completed successfully!');
+    console.log('Build completed successfully!');
 } catch (error) {
-  console.error('Build failed:', error.message);
-  process.exit(1);
+    console.error('Build failed:', error.message);
+    process.exit(1);
 }

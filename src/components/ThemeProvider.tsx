@@ -40,14 +40,23 @@ export function ThemeProvider({
           setThemeConfig(config);
           // Set CSS variables
           if (config) {
-            document.documentElement.style.setProperty("--color-primary", config.primaryColor);
-            document.documentElement.style.setProperty("--color-accent", config.accentColor);
+            document.documentElement.style.setProperty(
+              "--color-primary",
+              config.primaryColor,
+            );
+            document.documentElement.style.setProperty(
+              "--color-accent",
+              config.accentColor,
+            );
           }
         }
       } catch (error) {
         console.error("Failed to load theme config:", error);
         // Set defaults
-        document.documentElement.style.setProperty("--color-primary", "#64ffda");
+        document.documentElement.style.setProperty(
+          "--color-primary",
+          "#64ffda",
+        );
         document.documentElement.style.setProperty("--color-accent", "#0a192f");
       }
     };
@@ -79,7 +88,7 @@ export function ThemeProvider({
       toggleTheme,
       themeConfig,
     }),
-    [theme, themeConfig]
+    [theme, themeConfig],
   );
 
   return (

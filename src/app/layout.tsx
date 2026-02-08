@@ -9,7 +9,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-  fallback: ["system-ui", "sans-serif"]
+  fallback: ["system-ui", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -26,7 +26,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   // Removed inline DOM-mutation scripts to avoid hydration mismatches.
   // Theme and path are set client-side by ThemeProvider and SetBodyPath.
 
