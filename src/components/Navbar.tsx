@@ -25,9 +25,6 @@ const Navbar = () => {
 
   return (
     <header className="site-navbar fixed inset-x-0 top-0 z-50">
-      <div className="pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-[rgba(4,8,19,0.75)] via-[rgba(4,8,19,0.45)] to-transparent" />
-      </div>
       <nav className="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-10 py-4">
         <div className="glass-panel flex items-center justify-between gap-4 px-4 py-3">
           {/* Logo / brand */}
