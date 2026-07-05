@@ -91,12 +91,21 @@ const skills = [
 async function main() {
   console.log("Starting database seed...");
 
-  const hashedPassword = await bcrypt.hash("admin123", 10);
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (!adminEmail || !adminPassword) {
+    throw new Error(
+      "ADMIN_EMAIL and ADMIN_PASSWORD are required to seed the admin account",
+    );
+  }
+
+  const hashedPassword = await bcrypt.hash(adminPassword, 10);
   const admin = await prisma.admin.upsert({
-    where: { email: "admin@portfolio.com" },
+    where: { email: adminEmail },
     update: {},
     create: {
-      email: "admin@portfolio.com",
+      email: adminEmail,
       password: hashedPassword,
       name: "Admin",
     },

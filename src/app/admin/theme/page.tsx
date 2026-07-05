@@ -12,7 +12,7 @@ export default async function ThemePage() {
 
       <div className="admin-card p-6">
         <p className="text-[var(--admin-text-secondary)] mb-6">
-          Customize your portfolio's color scheme. Changes will be applied
+          Customize your portfolio&apos;s color scheme. Changes will be applied
           globally across your site.
         </p>
         <ThemeForm theme={theme} />

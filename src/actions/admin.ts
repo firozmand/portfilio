@@ -1,9 +1,5 @@
 "use server";
 
-// Server actions run in Node.js runtime, allowing use of Prisma, bcryptjs, fs, and path.
-// These are executed at runtime, not during build or static generation.
-// @ts-ignore prisma is checked in each function
-
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
@@ -11,16 +7,36 @@ import bcrypt from "bcryptjs";
 import fs from "fs/promises";
 import path from "path";
 
-async function saveUploadedFile(file: any) {
-  if (!file || typeof file.arrayBuffer !== "function") return null;
+const MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
+const uploadExtensions = {
+  resume: new Set([".pdf", ".doc", ".docx"]),
+  image: new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]),
+};
+
+async function saveUploadedFile(
+  file: FormDataEntryValue | null,
+  kind: keyof typeof uploadExtensions,
+) {
+  if (!(file instanceof File) || file.size === 0) return null;
+  if (file.size > MAX_UPLOAD_SIZE) {
+    throw new Error("Uploaded files must be 5 MB or smaller");
+  }
+
+  const extension = path.extname(file.name).toLowerCase();
+  if (!uploadExtensions[kind].has(extension)) {
+    throw new Error(`Unsupported ${kind} file type`);
+  }
 
   const buffer = Buffer.from(await file.arrayBuffer());
   const uploadsDir = path.join(process.cwd(), "public", "uploads");
   await fs.mkdir(uploadsDir, { recursive: true });
 
-  const originalName = file.name || `file-${Date.now()}`;
-  const safeName = encodeURIComponent(originalName.replace(/\s+/g, "-"));
-  const filename = `${Date.now()}-${safeName}`;
+  const baseName = path
+    .basename(file.name, extension)
+    .replace(/[^a-zA-Z0-9_-]+/g, "-")
+    .replace(/(^-|-$)/g, "")
+    .slice(0, 80);
+  const filename = `${Date.now()}-${baseName || "upload"}${extension}`;
   const filepath = path.join(uploadsDir, filename);
 
   await fs.writeFile(filepath, buffer);
@@ -39,11 +55,17 @@ export async function updateProfile(formData: FormData) {
   }
 
   // handle resume file upload if provided
-  const resumeFile = formData.get("resumeFile") as any;
+  const resumeFile = formData.get("resumeFile");
   let resumeUrl = (formData.get("resumeUrl") as string) || null;
   if (resumeFile && typeof resumeFile !== "string") {
-    const saved = await saveUploadedFile(resumeFile);
-    if (saved) resumeUrl = saved;
+    try {
+      const saved = await saveUploadedFile(resumeFile, "resume");
+      if (saved) resumeUrl = saved;
+    } catch (error) {
+      return {
+        error: error instanceof Error ? error.message : "Invalid resume file",
+      };
+    }
   }
 
   const data = {
@@ -55,7 +77,6 @@ export async function updateProfile(formData: FormData) {
   };
 
   try {
-    // @ts-ignore prisma is checked above
     const profile = await prisma.profile.findFirst();
 
     if (profile) {
@@ -94,11 +115,17 @@ export async function createProject(formData: FormData) {
     .filter(Boolean);
 
   // process thumbnail file if provided
-  const thumbnailFile = formData.get("thumbnailFile") as any;
+  const thumbnailFile = formData.get("thumbnailFile");
   let thumbnail = (formData.get("thumbnail") as string) || null;
   if (thumbnailFile && typeof thumbnailFile !== "string") {
-    const saved = await saveUploadedFile(thumbnailFile);
-    if (saved) thumbnail = saved;
+    try {
+      const saved = await saveUploadedFile(thumbnailFile, "image");
+      if (saved) thumbnail = saved;
+    } catch (error) {
+      return {
+        error: error instanceof Error ? error.message : "Invalid image file",
+      };
+    }
   }
 
   const data = {
@@ -112,7 +139,6 @@ export async function createProject(formData: FormData) {
     isVisible: formData.get("isVisible") === "true",
   };
 
-  // @ts-ignore
   try {
     await prisma.project.create({ data });
     revalidatePath("/");
@@ -141,11 +167,17 @@ export async function updateProject(id: string, formData: FormData) {
     .filter(Boolean);
 
   // process thumbnail file if provided
-  const thumbnailFile = formData.get("thumbnailFile") as any;
+  const thumbnailFile = formData.get("thumbnailFile");
   let thumbnail = (formData.get("thumbnail") as string) || null;
   if (thumbnailFile && typeof thumbnailFile !== "string") {
-    const saved = await saveUploadedFile(thumbnailFile);
-    if (saved) thumbnail = saved;
+    try {
+      const saved = await saveUploadedFile(thumbnailFile, "image");
+      if (saved) thumbnail = saved;
+    } catch (error) {
+      return {
+        error: error instanceof Error ? error.message : "Invalid image file",
+      };
+    }
   }
 
   const data = {
@@ -159,7 +191,6 @@ export async function updateProject(id: string, formData: FormData) {
     isVisible: formData.get("isVisible") === "true",
   };
 
-  // @ts-ignore
   try {
     await prisma.project.update({
       where: { id },
@@ -183,7 +214,6 @@ export async function deleteProject(id: string) {
   if (!prisma) {
     return { error: "Database not available" };
   }
-  // @ts-ignore
   try {
     await prisma.project.delete({
       where: { id },
@@ -215,7 +245,6 @@ export async function createSkill(formData: FormData) {
     order: parseInt(formData.get("order") as string) || 0,
   };
 
-  // @ts-ignore
   try {
     await prisma.skill.create({ data });
     revalidatePath("/");
@@ -244,7 +273,6 @@ export async function updateSkill(id: string, formData: FormData) {
     order: parseInt(formData.get("order") as string) || 0,
   };
 
-  // @ts-ignore
   try {
     await prisma.skill.update({
       where: { id },
@@ -265,8 +293,11 @@ export async function deleteSkill(id: string) {
     return { error: "Unauthorized" };
   }
 
+  if (!prisma) {
+    return { error: "Database not available" };
+  }
+
   try {
-    // @ts-ignore
     await prisma.skill.delete({
       where: { id },
     });
@@ -295,7 +326,6 @@ export async function updateTheme(formData: FormData) {
     accentColor: formData.get("accentColor") as string,
   };
 
-  // @ts-ignore
   try {
     const theme = await prisma.themeConfig.findFirst();
 
@@ -339,7 +369,6 @@ export async function updateAdminCredentials(formData: FormData) {
     return { error: "Current password is required" };
   }
 
-  // @ts-ignore
   try {
     // Resolve admin by id if available, otherwise try session email, otherwise fallback to first admin
     let admin = null;
@@ -358,12 +387,10 @@ export async function updateAdminCredentials(formData: FormData) {
 
     if (!admin) return { error: "Admin not found" };
 
-    if (!admin) return { error: "Admin not found" };
-
     const valid = await bcrypt.compare(currentPassword, admin.password);
     if (!valid) return { error: "Current password is incorrect" };
 
-    const updateData: any = {};
+    const updateData: { email?: string; password?: string } = {};
 
     if (newEmail && newEmail !== admin.email) {
       // ensure unique

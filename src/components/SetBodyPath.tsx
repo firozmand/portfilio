@@ -11,7 +11,7 @@ export default function SetBodyPath() {
       if (typeof document !== "undefined") {
         document.body.setAttribute("data-path", pathname || "/");
       }
-    } catch (e) {
+    } catch {
       // no-op
     }
   }, [pathname]);

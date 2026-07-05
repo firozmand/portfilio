@@ -146,7 +146,7 @@ export default function ProfileForm({ profile }: ProfileFormProps) {
             Resume URL (optional)
           </label>
           <input
-            type="url"
+            type="text"
             id="resumeUrl"
             name="resumeUrl"
             defaultValue={profile?.resumeUrl || ""}

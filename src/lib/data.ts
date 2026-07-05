@@ -121,6 +121,10 @@ export const getSkillsByCategory = cache(
 // Theme
 export const getThemeConfig = cache(async (): Promise<ThemeConfig | null> => {
   if (!prisma) return null; // No DB available
-  const theme = await prisma.themeConfig.findFirst();
-  return theme;
+  try {
+    return await prisma.themeConfig.findFirst();
+  } catch (error) {
+    console.error("Failed to load theme data:", error);
+    return null;
+  }
 });

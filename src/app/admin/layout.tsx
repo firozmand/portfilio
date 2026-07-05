@@ -4,7 +4,6 @@ import { ReactNode, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import AdminNav from "./AdminNav";
-import AdminThemeToggle from "@/components/AdminThemeToggle";
 import AdminSidebar from "@/components/AdminSidebar";
 
 type ThemeConfig = {
@@ -68,8 +67,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       data-admin-theme="dark"
       style={
         {
-          "--theme-primary": theme?.primaryColor || "#64ffda",
-          "--theme-accent": theme?.accentColor || "#0a192f",
+          "--theme-primary": theme?.primaryColor || "#c5ff4a",
+          "--theme-accent": theme?.accentColor || "#07110f",
         } as React.CSSProperties
       }
     >

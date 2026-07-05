@@ -16,19 +16,17 @@ type ThemeContextValue = {
   themeConfig: ThemeConfig;
 };
 
-const STORAGE_KEY = "portfolio-theme";
-
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export function ThemeProvider({
   children,
-  defaultTheme = "dark",
 }: {
   children: React.ReactNode;
   defaultTheme?: ThemeMode;
 }) {
-  const [theme, setTheme] = useState<ThemeMode>(defaultTheme);
   const [themeConfig, setThemeConfig] = useState<ThemeConfig>(null);
+  const theme: ThemeMode = "dark";
+  const setTheme = () => undefined;
 
   // Load theme config from API
   useEffect(() => {
@@ -55,9 +53,9 @@ export function ThemeProvider({
         // Set defaults
         document.documentElement.style.setProperty(
           "--color-primary",
-          "#64ffda",
+          "#c5ff4a",
         );
-        document.documentElement.style.setProperty("--color-accent", "#0a192f");
+        document.documentElement.style.setProperty("--color-accent", "#07110f");
       }
     };
 
@@ -65,16 +63,7 @@ export function ThemeProvider({
   }, []);
 
   useEffect(() => {
-    const stored =
-      (localStorage.getItem(STORAGE_KEY) as ThemeMode | null) || null;
-    const nextTheme = stored || "dark";
-    setTheme(nextTheme);
-    document.documentElement.dataset.theme = nextTheme;
-  }, [defaultTheme]);
-
-  useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    localStorage.setItem(STORAGE_KEY, theme);
   }, [theme]);
 
   const toggleTheme = () => {
@@ -88,7 +77,7 @@ export function ThemeProvider({
       toggleTheme,
       themeConfig,
     }),
-    [theme, themeConfig],
+    [themeConfig],
   );
 
   return (

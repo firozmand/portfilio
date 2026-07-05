@@ -1,15 +1,19 @@
 "use client";
 import React from "react";
 
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: "primary" | "secondary" | "destructive";
+};
+
 export default function Button({
   children,
   variant = "primary",
   className = "",
   ...props
-}: any) {
+}: ButtonProps) {
   const base =
     "inline-flex items-center justify-center px-4 py-2 rounded-xl font-medium transition shadow-[var(--shadow-soft)]";
-  const variants: Record<string, string> = {
+  const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
     primary:
       "bg-[color-mix(in_srgb,var(--color-primary)_90%,transparent)] text-[#02121f] hover:brightness-105",
     secondary:
@@ -20,7 +24,7 @@ export default function Button({
   return (
     <button
       className={`${base} ${
-        variants[variant] || variants.primary
+        variants[variant]
       } ${className}`}
       {...props}
     >
