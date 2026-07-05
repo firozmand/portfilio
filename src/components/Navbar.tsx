@@ -1,6 +1,11 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -13,10 +18,16 @@ const navLinks = [
   { name: "Contact", url: "#contact" },
 ];
 
+const subscribeToHydration = () => () => undefined;
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    subscribeToHydration,
+    () => true,
+    () => false,
+  );
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -31,10 +42,6 @@ export default function Navbar() {
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
-  useEffect(() => {
-    setMounted(true);
   }, []);
 
   useEffect(() => {
@@ -88,8 +95,7 @@ export default function Navbar() {
 
             <a
               href="/resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+              download="Ali-Firozmand-Resume.pdf"
               className="inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--color-primary)_14%,transparent)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] shadow-[var(--shadow-soft)] transition hover:shadow-lg"
             >
               Resume
@@ -162,8 +168,7 @@ export default function Navbar() {
                       <div className="px-2 mt-4">
                         <a
                           href="/resume.pdf"
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          download="Ali-Firozmand-Resume.pdf"
                           className="inline-flex w-full items-center justify-center rounded-xl border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--color-primary)_14%,transparent)] px-6 py-3 text-base font-semibold text-[var(--text-primary)] shadow-[var(--shadow-soft)]"
                         >
                           Resume

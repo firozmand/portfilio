@@ -158,8 +158,8 @@ async function main() {
     update: {},
     create: {
       id: "default-theme",
-      primaryColor: "#b7ff3c",
-      accentColor: "#07110f",
+      primaryColor: "#64ffda",
+      accentColor: "#0a192f",
     },
   });
   console.log("Theme ready");

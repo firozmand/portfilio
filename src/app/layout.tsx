@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "@/app/globals.css";
 import Navbar from "../components/Navbar";
@@ -13,8 +13,32 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://firozmand.ir"),
   title: "Ali Firozmand | Front-End Developer",
-  description: "Portfolio of Ali Firozmand",
+  description:
+    "Front-End Developer with 4+ years of experience building modern products with Next.js, React, and TypeScript.",
+  keywords: [
+    "Ali Firozmand",
+    "Front-End Developer",
+    "Next.js",
+    "React",
+    "TypeScript",
+  ],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: "https://firozmand.ir",
+    title: "Ali Firozmand | Front-End Developer",
+    description:
+      "Portfolio, selected work, and experience of Ali Firozmand.",
+    images: ["/profile.jpg"],
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#040813",
 };
 
 // This layout runs during prerender and does not execute database queries.

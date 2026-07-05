@@ -53,9 +53,9 @@ export function ThemeProvider({
         // Set defaults
         document.documentElement.style.setProperty(
           "--color-primary",
-          "#c5ff4a",
+          "#64ffda",
         );
-        document.documentElement.style.setProperty("--color-accent", "#07110f");
+        document.documentElement.style.setProperty("--color-accent", "#0a192f");
       }
     };
 

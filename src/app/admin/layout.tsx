@@ -67,8 +67,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       data-admin-theme="dark"
       style={
         {
-          "--theme-primary": theme?.primaryColor || "#c5ff4a",
-          "--theme-accent": theme?.accentColor || "#07110f",
+          "--theme-primary": theme?.primaryColor || "#64ffda",
+          "--theme-accent": theme?.accentColor || "#0a192f",
         } as React.CSSProperties
       }
     >
