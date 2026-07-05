@@ -5,12 +5,22 @@
 import { prisma } from "./prisma";
 import { cache } from "react";
 import type { Profile, Project, Skill, ThemeConfig } from "@prisma/client";
+import {
+  portfolioProfile,
+  resumeProjects,
+  resumeSkills,
+} from "./portfolio";
 
 // Profile
 export const getProfile = cache(async (): Promise<Profile | null> => {
-  if (!prisma) return null; // No DB available
-  const profile = await prisma.profile.findFirst();
-  return profile;
+  if (!prisma) return portfolioProfile;
+
+  try {
+    return (await prisma.profile.findFirst()) ?? portfolioProfile;
+  } catch (error) {
+    console.error("Failed to load profile data:", error);
+    return portfolioProfile;
+  }
 });
 
 // Projects
@@ -18,16 +28,24 @@ export const getProjects = cache(
   async (): Promise<
     (Omit<Project, "techStack"> & { techStack: string[] })[]
   > => {
-    if (!prisma) return []; // No DB available
-    const projects = await prisma.project.findMany({
-      where: { isVisible: true },
-      orderBy: { order: "asc" },
-    });
+    if (!prisma) return resumeProjects;
 
-    return projects.map((project) => ({
-      ...project,
-      techStack: JSON.parse(project.techStack) as string[],
-    }));
+    try {
+      const projects = await prisma.project.findMany({
+        where: { isVisible: true },
+        orderBy: { order: "asc" },
+      });
+
+      if (!projects.length) return resumeProjects;
+
+      return projects.map((project) => ({
+        ...project,
+        techStack: JSON.parse(project.techStack) as string[],
+      }));
+    } catch (error) {
+      console.error("Failed to load project data:", error);
+      return resumeProjects;
+    }
   }
 );
 
@@ -67,19 +85,22 @@ export const getProjectById = cache(
 
 // Skills
 export const getSkills = cache(async (): Promise<Skill[]> => {
-  if (!prisma) return []; // No DB available
-  const skills = await prisma.skill.findMany({
-    orderBy: { order: "asc" },
-  });
-  return skills;
+  if (!prisma) return resumeSkills;
+
+  try {
+    const skills = await prisma.skill.findMany({
+      orderBy: { order: "asc" },
+    });
+    return skills.length ? skills : resumeSkills;
+  } catch (error) {
+    console.error("Failed to load skill data:", error);
+    return resumeSkills;
+  }
 });
 
 export const getSkillsByCategory = cache(
   async (): Promise<Record<string, Skill[]>> => {
-    if (!prisma) return {}; // No DB available
-    const skills = await prisma.skill.findMany({
-      orderBy: [{ category: "asc" }, { order: "asc" }],
-    });
+    const skills = await getSkills();
 
     const grouped = skills.reduce(
       (acc: Record<string, Skill[]>, skill: Skill) => {

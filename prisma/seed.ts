@@ -3,10 +3,94 @@ import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
+const projects = [
+  {
+    id: "portfolio-festivvo",
+    title: "Festivvo",
+    description:
+      "A modern event and concert ticketing product with responsive purchase journeys, scalable front-end architecture, and a strong focus on performance.",
+    techStack: JSON.stringify([
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+    ]),
+    thumbnail: null,
+    liveUrl: "https://festivvo.ir",
+    githubUrl: null,
+    order: 1,
+    isVisible: true,
+  },
+  {
+    id: "portfolio-esanj",
+    title: "E-Sanj Test Builder",
+    description:
+      "A psychology assessment builder that turns structured data into HTML, CSS, JavaScript, and JSON while keeping complex rendering logic manageable.",
+    techStack: JSON.stringify(["Next.js", "JavaScript", "SSR/SSG", "JSON"]),
+    thumbnail: null,
+    liveUrl: "https://esanj.ir",
+    githubUrl: null,
+    order: 2,
+    isVisible: true,
+  },
+  {
+    id: "portfolio-asgari-holdings",
+    title: "Asgari Holdings",
+    description:
+      "The corporate website for Asgari Holdings, shaped around a contemporary visual language, scalable content structure, fast delivery, and SEO.",
+    techStack: JSON.stringify([
+      "Next.js",
+      "TypeScript",
+      "Responsive UI",
+      "SEO",
+    ]),
+    thumbnail: null,
+    liveUrl: "https://asgariholdings.com",
+    githubUrl: null,
+    order: 3,
+    isVisible: true,
+  },
+  {
+    id: "portfolio-brand-center",
+    title: "Brand Center",
+    description:
+      "A multi-surface platform for employers and brands, including profile pages, brand introductions, and structured organizational content.",
+    techStack: JSON.stringify([
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+    ]),
+    thumbnail: null,
+    liveUrl: "https://brand-center.org",
+    githubUrl: null,
+    order: 4,
+    isVisible: true,
+  },
+];
+
+const skills = [
+  ["Next.js", 95, "Frontend"],
+  ["React", 95, "Frontend"],
+  ["TypeScript", 90, "Frontend"],
+  ["JavaScript ES6+", 92, "Frontend"],
+  ["Vue.js", 82, "Frontend"],
+  ["Tailwind CSS", 95, "UI"],
+  ["Sass / SCSS", 84, "UI"],
+  ["Responsive UI", 94, "UI"],
+  ["Redux Toolkit", 88, "State & Data"],
+  ["Zustand", 86, "State & Data"],
+  ["TanStack Query", 88, "State & Data"],
+  ["REST APIs", 90, "State & Data"],
+  ["SSR / SSG / CSR", 90, "Architecture"],
+  ["SEO & Performance", 88, "Architecture"],
+  ["Git / GitLab", 90, "Tools"],
+  ["Docker", 76, "Tools"],
+] as const;
+
 async function main() {
   console.log("Starting database seed...");
 
-  // Create admin user
   const hashedPassword = await bcrypt.hash("admin123", 10);
   const admin = await prisma.admin.upsert({
     where: { email: "admin@portfolio.com" },
@@ -17,115 +101,65 @@ async function main() {
       name: "Admin",
     },
   });
-  console.log("✓ Admin user created:", admin.email);
+  console.log("Admin ready:", admin.email);
 
-  // Create profile
+  const profileData = {
+    fullName: "Ali Firozmand",
+    shortBio:
+      "Front-End Developer focused on modern, high-performance products.",
+    aboutMe:
+      "Front-end developer with 4+ years of experience designing and building modern web applications, management panels, online sales systems, and content platforms. I focus on Next.js, React, and TypeScript, with a strong interest in component architecture, rendering strategy, performance, SEO, clean code, and practical collaboration.",
+    email: "firozmand.dev@gmail.com",
+    resumeUrl: "/resume.pdf",
+  };
+
   const profile = await prisma.profile.upsert({
     where: { id: "default-profile" },
-    update: {},
-    create: {
-      id: "default-profile",
-      fullName: "Ali Firozmand",
-      shortBio: "I build things for the web.",
-      aboutMe: `I'm a front-end developer specializing in building exceptional digital experiences. Currently, I'm focused on building accessible, human-centered products with React and Next.js.`,
-      email: "firozmand.dev@gmail.com",
-    },
+    update: profileData,
+    create: { id: "default-profile", ...profileData },
   });
-  console.log("✓ Profile created:", profile.fullName);
-
-  // Create projects
-  const projects = [
-    {
-      title: "Finomate",
-      description:
-        "The core charting and analysis microservice for the Finomate platform. I developed this service to deliver high-performance, interactive visualizations of cryptocurrency and financial market data.",
-      techStack: JSON.stringify([
-        "Next.js",
-        "TypeScript",
-        "Tailwind CSS",
-        "Stripe API",
-        "Framer Motion",
-      ]),
-      thumbnail: "/finomate-project.png",
-      liveUrl: "https://chart.finomate.io/",
-      githubUrl: "https://github.com/firozmand",
-      order: 1,
-      isVisible: true,
-    },
-    {
-      title: "Amlak Daran",
-      description:
-        "A comprehensive real estate platform using Vue.js, Nuxt.js, and Tailwind CSS. The site provides property sales, rentals, and a unique property exchange feature.",
-      techStack: JSON.stringify([
-        "Vue.js",
-        "Nuxt.js",
-        "Tailwind CSS",
-        "JavaScript",
-      ]),
-      thumbnail: "/amlak-daran.png",
-      liveUrl: "https://amlakdaran.com/",
-      githubUrl: "https://github.com/firozmand/AmlakDaran",
-      order: 2,
-      isVisible: true,
-    },
-    {
-      title: "Finomate Landing Page",
-      description:
-        "The landing page for Finomate, an AI-powered trading assistant for the crypto market.",
-      techStack: JSON.stringify([
-        "Next.js",
-        "Tailwind CSS",
-        "Redux Toolkit",
-        "MongoDB",
-      ]),
-      thumbnail: "/finomate-land.png",
-      liveUrl: "https://land.finomate.io/",
-      githubUrl: "https://github.com/firozmand/",
-      order: 3,
-      isVisible: true,
-    },
-  ];
+  console.log("Profile ready:", profile.fullName);
 
   for (const project of projects) {
-    await prisma.project.create({ data: project });
+    await prisma.project.upsert({
+      where: { id: project.id },
+      update: project,
+      create: project,
+    });
   }
-  console.log(`✓ Created ${projects.length} projects`);
+  console.log(`Projects ready: ${projects.length}`);
 
-  // Create skills
-  const skills = [
-    { name: "React", level: 95, category: "Frontend", order: 1 },
-    { name: "Next.js", level: 90, category: "Frontend", order: 2 },
-    { name: "TypeScript", level: 85, category: "Frontend", order: 3 },
-    { name: "Vue.js", level: 85, category: "Frontend", order: 4 },
-    { name: "Tailwind CSS", level: 95, category: "Frontend", order: 5 },
-    { name: "Node.js", level: 80, category: "Backend", order: 6 },
-    { name: "PostgreSQL", level: 75, category: "Backend", order: 7 },
-    { name: "Git", level: 90, category: "Tools", order: 8 },
-  ];
+  for (const [index, [name, level, category]] of skills.entries()) {
+    const id = `portfolio-skill-${name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "")}`;
+    const data = { id, name, level, category, order: index + 1 };
 
-  for (const skill of skills) {
-    await prisma.skill.create({ data: skill });
+    await prisma.skill.upsert({
+      where: { id },
+      update: data,
+      create: data,
+    });
   }
-  console.log(`✓ Created ${skills.length} skills`);
+  console.log(`Skills ready: ${skills.length}`);
 
-  // Create theme config
-  const theme = await prisma.themeConfig.upsert({
+  await prisma.themeConfig.upsert({
     where: { id: "default-theme" },
     update: {},
     create: {
       id: "default-theme",
-      primaryColor: "#64ffda",
-      accentColor: "#0a192f",
+      primaryColor: "#b7ff3c",
+      accentColor: "#07110f",
     },
   });
-  console.log("✓ Theme config created");
-
-  console.log("✓ Database seeding completed!");
+  console.log("Theme ready");
+  console.log("Database seeding completed");
 }
 
 main()
-  .catch((e) => {
-    console.error("Error seeding database:", e);
+  .catch((error) => {
+    console.error("Database seed failed:", error);
     process.exit(1);
   })
   .finally(async () => {
