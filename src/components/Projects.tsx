@@ -1,110 +1,78 @@
-import Image from "next/image";
-import Link from "next/link";
-import { FiGithub, FiExternalLink } from "react-icons/fi";
-import { getProjects } from "@/lib/data";
-import type { Project } from "@prisma/client";
+import { FiArrowUpRight } from "react-icons/fi";
+import { resumeProjects } from "@/lib/portfolio";
 
-// Server component in Node.js runtime, loading projects with database fallbacks.
+const projectLabels = [
+  "Ticketing platform",
+  "Assessment builder",
+  "Corporate experience",
+  "Brand platform",
+] as const;
 
-const Projects = async () => {
-  const projects: (Omit<Project, "techStack"> & { techStack: string[] })[] =
-    await getProjects();
-
-  const placeholderImage =
-    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='750' viewBox='0 0 1200 750'%3E%3Crect width='1200' height='750' fill='%230a192f'/%3E%3Ctext x='50%' y='50%' fill='%2364ffda' font-size='48' font-family='sans-serif' text-anchor='middle'%3EProject%3C/text%3E%3C/svg%3E";
-
-  if (!projects.length) {
-    return null;
-  }
-
+export default function Projects() {
   return (
-    <section id="projects" className="py-24">
-      <div className="mb-10 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="text-green font-mono text-sm">03.</span>
-          <h2 className="text-3xl font-semibold text-[var(--text-primary)]">
-            Selected Work
-          </h2>
+    <section
+      id="projects"
+      className="section-shell"
+      aria-labelledby="projects-title"
+    >
+      <div className="section-heading">
+        <div>
+          <p className="section-kicker">03 · Selected work</p>
+          <h2 id="projects-title">Products built for real-world use.</h2>
         </div>
-        <div className="hidden sm:block h-px w-32 bg-gradient-to-r from-transparent via-[var(--border-strong)] to-transparent" />
+        <p className="section-lead">
+          A selection from my latest résumé: products for ticketing,
+          assessments, corporate communication, and employer branding.
+        </p>
       </div>
 
-      <div className="space-y-10">
-        {projects.map((project, index) => (
-          <div
-            key={index}
-            className="glass-panel overflow-hidden p-6 shadow-[var(--shadow-card)]"
-          >
-            <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] items-center">
-              <div className="relative overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface)]">
-                <div className="absolute inset-0 bg-gradient-to-tr from-[color-mix(in_srgb,var(--color-primary)_28%,transparent)]/30 via-transparent to-transparent" />
-                <Image
-                  src={project.thumbnail || placeholderImage}
-                  alt={project.title}
-                  width={1200}
-                  height={750}
-                  className="h-full w-full object-cover"
-                />
+      <div className="projects-grid">
+        {resumeProjects.map((project, index) => (
+          <article className="project-card" key={project.id}>
+            <div className={`project-canvas project-canvas-${index + 1}`}>
+              <div className="canvas-toolbar">
+                <span />
+                <span />
+                <span />
+                <small>0{index + 1} / 04</small>
               </div>
-
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center justify-between gap-3">
-                  <p className="text-sm font-mono uppercase tracking-[0.12em] text-green">
-                    Featured project
-                  </p>
-                  <div className="flex items-center gap-3 text-[var(--text-secondary)]">
-                    {project.githubUrl && (
-                      <Link
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface)] p-2 text-[var(--text-primary)] transition hover:text-green"
-                      >
-                        <FiGithub size={18} />
-                      </Link>
-                    )}
-                    {project.liveUrl && (
-                      <Link
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface)] p-2 text-[var(--text-primary)] transition hover:text-green"
-                      >
-                        <FiExternalLink size={18} />
-                      </Link>
-                    )}
-                  </div>
-                </div>
-                <h3 className="text-2xl font-semibold text-[var(--text-primary)]">
-                  <a
-                    href={project.liveUrl || project.githubUrl || "#"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-green transition-colors"
-                  >
-                    {project.title}
-                  </a>
-                </h3>
-                <p className="text-base leading-relaxed text-[var(--text-secondary)]">
-                  {project.description}
-                </p>
-                <ul className="flex flex-wrap items-center gap-3 text-sm font-medium text-[var(--text-secondary)]">
-                  {project.techStack.map((tech, i) => (
-                    <li
-                      key={i}
-                      className="rounded-full border border-[var(--border-subtle)] bg-[var(--surface)] px-3 py-1 text-[var(--text-primary)] shadow-[var(--shadow-soft)]"
-                    >
-                      {tech}
-                    </li>
-                  ))}
-                </ul>
+              <div className="canvas-word" aria-hidden="true">
+                {project.title.split(" ")[0]}
               </div>
+              <div className="canvas-lines" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </div>
+              <div className="canvas-badge">Live product</div>
             </div>
-          </div>
+
+            <div className="project-body">
+              <div className="project-meta">
+                <span>{projectLabels[index]}</span>
+                <span>0{index + 1}</span>
+              </div>
+              <h3>{project.title}</h3>
+              <p>{project.description}</p>
+              <ul aria-label={`${project.title} technology stack`}>
+                {project.techStack.map((technology) => (
+                  <li key={technology}>{technology}</li>
+                ))}
+              </ul>
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Visit ${project.title}`}
+                >
+                  Visit project <FiArrowUpRight aria-hidden="true" />
+                </a>
+              )}
+            </div>
+          </article>
         ))}
       </div>
     </section>
   );
-};
-
-export default Projects;
+}

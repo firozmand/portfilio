@@ -1,46 +1,44 @@
-import { getProfile } from "@/lib/data";
+import { FiArrowUpRight, FiDownload, FiMail } from "react-icons/fi";
+import { personalDetails, portfolioProfile } from "@/lib/portfolio";
 
-const Contact = async () => {
-  const profile = await getProfile();
-  if (!profile) return null;
-
+export default function Contact() {
   return (
-    <section id="contact" className="py-24">
-      <div className="max-w-3xl mx-auto">
-        <div className="glass-panel relative overflow-hidden px-8 py-12 text-center shadow-[var(--shadow-card)]">
-          <div className="pointer-events-none absolute inset-0 opacity-60">
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--border-strong)] to-transparent" />
-            <div className="absolute left-1/2 top-6 h-36 w-36 -translate-x-1/2 rounded-full bg-[color-mix(in_srgb,var(--color-primary)_24%,transparent)] blur-3xl" />
-          </div>
+    <section
+      id="contact"
+      className="contact-section"
+      aria-labelledby="contact-title"
+    >
+      <div className="contact-orbit contact-orbit-one" aria-hidden="true" />
+      <div className="contact-orbit contact-orbit-two" aria-hidden="true" />
+      <p className="section-kicker">04 · Let&apos;s work together</p>
+      <h2 id="contact-title">
+        Have a product that deserves a sharper front end?
+      </h2>
+      <p>
+        I&apos;m open to product teams and selective freelance collaborations
+        where craft, performance, and maintainable engineering matter.
+      </p>
 
-          <p className="text-sm font-mono uppercase tracking-[0.14em] text-green">
-            04. What’s next
-          </p>
-          <h3 className="mt-4 text-4xl font-semibold text-[var(--text-primary)]">
-            Let’s build something calm
-          </h3>
-          <p className="mt-4 text-lg leading-relaxed text-[var(--text-secondary)]">
-            {profile.shortBio ||
-              "Feel free to reach out if you want to collaborate or just say hello."}
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <a
-              href={`mailto:${profile.email}`}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--color-primary)_16%,transparent)] px-7 py-3 text-base font-semibold text-[var(--text-primary)] shadow-[var(--shadow-soft)] transition hover:-translate-y-0.5 hover:shadow-lg"
-            >
-              Say hello
-            </a>
-            <a
-              href="#projects"
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface)] px-7 py-3 text-base font-semibold text-[var(--text-primary)] shadow-[var(--shadow-soft)] transition hover:-translate-y-0.5 hover:shadow-lg"
-            >
-              View projects
-            </a>
-          </div>
-        </div>
+      <div className="contact-actions">
+        <a className="button button-dark" href={`mailto:${portfolioProfile.email}`}>
+          <FiMail aria-hidden="true" />
+          Start a conversation
+          <FiArrowUpRight aria-hidden="true" />
+        </a>
+        <a
+          className="button button-outline-dark"
+          href={portfolioProfile.resumeUrl ?? "/resume.pdf"}
+          download="Ali-Firozmand-Resume.pdf"
+        >
+          <FiDownload aria-hidden="true" />
+          Download résumé
+        </a>
+      </div>
+
+      <div className="contact-foot">
+        <a href={`mailto:${portfolioProfile.email}`}>{portfolioProfile.email}</a>
+        <span>{personalDetails.location}</span>
       </div>
     </section>
   );
-};
-
-export default Contact;
+}
