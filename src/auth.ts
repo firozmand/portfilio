@@ -7,6 +7,9 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  // Requests are served behind Vercel's trusted reverse proxy.
+  trustHost: true,
+  session: { strategy: "jwt" },
   providers: [
     Credentials({
       credentials: {
@@ -50,6 +53,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/admin/login",
   },
   callbacks: {
+    jwt({ token, user }) {
+      if (user?.id) token.sub = user.id;
+      return token;
+    },
+    session({ session, token }) {
+      if (session.user && token.sub) session.user.id = token.sub;
+      return session;
+    },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isOnAdmin = nextUrl.pathname.startsWith("/admin");

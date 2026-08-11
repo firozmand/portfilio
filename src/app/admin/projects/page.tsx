@@ -3,6 +3,8 @@ import Link from "next/link";
 import DeleteProjectButton from "./DeleteProjectButton";
 import type { Project } from "@prisma/client";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProjectsPage() {
   const projects: (Omit<Project, "techStack"> & { techStack: string[] })[] =
     await getAllProjects();

@@ -1,45 +1,50 @@
 # Ali Firozmand - Portfolio
 
-A production-ready portfolio for Ali Firozmand, built with Next.js 16, React 19, TypeScript, Tailwind CSS, Prisma, and NextAuth.
+A Next.js 16 portfolio with a protected admin panel backed by PostgreSQL,
+Prisma, and Auth.js.
 
-The public site is backed by the latest résumé content and intentionally works without a database. Prisma powers the optional admin area for profile, project, skill, and theme management.
+## Local setup
 
-## Quick start
+1. Install the pinned package manager and dependencies:
 
-```bash
-npm install
-npm run dev
-```
+   ```bash
+   corepack enable
+   pnpm install
+   ```
 
-Open [http://localhost:3000](http://localhost:3000). The résumé is served from `/resume.pdf` and can be downloaded from the navigation, hero, and contact sections.
+2. Copy `.env.example` to `.env` and set a PostgreSQL `DATABASE_URL`,
+   `AUTH_SECRET`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD`.
+
+3. Initialize and seed the database, then start the app:
+
+   ```bash
+   pnpm run db:deploy
+   pnpm run db:seed
+   pnpm run dev
+   ```
+
+Open <http://localhost:3000>. The admin panel is available at
+<http://localhost:3000/admin>.
+
+## Vercel setup
+
+- Connect a serverless PostgreSQL database (for example Neon or Supabase) and
+  expose its pooled connection string as `DATABASE_URL` in Production and
+  Preview.
+- Set `AUTH_SECRET`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` in Vercel.
+- Connect a Vercel Blob store if image or resume uploads are required. Vercel
+  provides `BLOB_READ_WRITE_TOKEN` to the project automatically.
+- Deploy once, then run `pnpm run db:seed` from a secure CI/admin environment
+  to create the initial administrator. Do not seed on every deployment.
+
+`vercel.json` runs Prisma generation and safe pending migrations before every
+Vercel build. It never resets or reseeds the production database.
 
 ## Quality checks
 
 ```bash
-npm run lint
-npm run typecheck
-npm run build
+pnpm run check
 ```
 
-Run all checks together with `npm run check`.
-
-## Optional admin setup
-
-Copy the environment template and replace every placeholder:
-
-```powershell
-Copy-Item .env.example .env
-npm run db:push
-npm run db:seed
-```
-
-Then visit [http://localhost:3000/admin](http://localhost:3000/admin). Never reuse development credentials in production.
-
-## Useful commands
-
-- `npm run dev` - start the development server
-- `npm run build` - create an optimized production build
-- `npm run start` - run the production build
-- `npm run db:push` - synchronize the local Prisma schema
-- `npm run db:deploy` - apply committed migrations in production
-- `npm run db:seed` - seed résumé-aligned data and the configured admin account
+The public portfolio still renders its bundled fallback content when no
+database is configured, but the admin panel requires PostgreSQL.

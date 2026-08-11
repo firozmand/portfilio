@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://firozmand.ir"),
   title: "Ali Firozmand | Front-End Developer",
   description:
-    "Front-End Developer with 4+ years of experience building modern products with Next.js, React, and TypeScript.",
+    "Front-End Developer with 4 years of experience building web applications and admin panels with Next.js, React, and TypeScript.",
   keywords: [
     "Ali Firozmand",
     "Front-End Developer",

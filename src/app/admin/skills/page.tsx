@@ -1,10 +1,12 @@
-import { getSkills } from "@/lib/data";
+import { getAllSkills } from "@/lib/data";
 import Link from "next/link";
 import DeleteSkillButton from "./DeleteSkillButton";
 import type { Skill } from "@prisma/client";
 
+export const dynamic = "force-dynamic";
+
 export default async function SkillsPage() {
-  const skills: Skill[] = await getSkills();
+  const skills: Skill[] = await getAllSkills();
 
   return (
     <div>

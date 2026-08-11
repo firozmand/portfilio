@@ -3,11 +3,13 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
+import { put } from "@vercel/blob";
 import bcrypt from "bcryptjs";
 import fs from "fs/promises";
 import path from "path";
 
-const MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
+// Keep server uploads below Vercel Functions' 4.5 MB request limit.
+const MAX_UPLOAD_SIZE = 4 * 1024 * 1024;
 const uploadExtensions = {
   resume: new Set([".pdf", ".doc", ".docx"]),
   image: new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]),
@@ -19,7 +21,7 @@ async function saveUploadedFile(
 ) {
   if (!(file instanceof File) || file.size === 0) return null;
   if (file.size > MAX_UPLOAD_SIZE) {
-    throw new Error("Uploaded files must be 5 MB or smaller");
+    throw new Error("Uploaded files must be 4 MB or smaller");
   }
 
   const extension = path.extname(file.name).toLowerCase();
@@ -27,16 +29,33 @@ async function saveUploadedFile(
     throw new Error(`Unsupported ${kind} file type`);
   }
 
-  const buffer = Buffer.from(await file.arrayBuffer());
-  const uploadsDir = path.join(process.cwd(), "public", "uploads");
-  await fs.mkdir(uploadsDir, { recursive: true });
-
   const baseName = path
     .basename(file.name, extension)
     .replace(/[^a-zA-Z0-9_-]+/g, "-")
     .replace(/(^-|-$)/g, "")
     .slice(0, 80);
   const filename = `${Date.now()}-${baseName || "upload"}${extension}`;
+
+  // Vercel Functions have an ephemeral filesystem. Persist production uploads
+  // in Blob storage; retain local filesystem storage for local development.
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    const blob = await put(`uploads/${kind}/${filename}`, file, {
+      access: "public",
+      addRandomSuffix: true,
+      contentType: file.type || undefined,
+    });
+    return blob.url;
+  }
+
+  if (process.env.VERCEL) {
+    throw new Error(
+      "File uploads are not configured. Connect a Vercel Blob store first",
+    );
+  }
+
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const uploadsDir = path.join(process.cwd(), "public", "uploads");
+  await fs.mkdir(uploadsDir, { recursive: true });
   const filepath = path.join(uploadsDir, filename);
 
   await fs.writeFile(filepath, buffer);

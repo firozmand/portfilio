@@ -1,6 +1,8 @@
 import { getThemeConfig } from "@/lib/data";
 import ThemeForm from "./ThemeForm";
 
+export const dynamic = "force-dynamic";
+
 export default async function ThemePage() {
   const theme = await getThemeConfig();
 

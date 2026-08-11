@@ -2,6 +2,7 @@
 
 import { updateTheme } from "@/actions/admin";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 type ThemeFormProps = {
   theme: {
@@ -11,6 +12,7 @@ type ThemeFormProps = {
 };
 
 export default function ThemeForm({ theme }: ThemeFormProps) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";
@@ -28,17 +30,26 @@ export default function ThemeForm({ theme }: ThemeFormProps) {
     setLoading(true);
     setMessage(null);
 
-    const formData = new FormData(e.currentTarget);
-    const result = await updateTheme(formData);
+    try {
+      const formData = new FormData(e.currentTarget);
+      const result = await updateTheme(formData);
 
-    if (result.error) {
-      setMessage({ type: "error", text: result.error });
-    } else {
-      setMessage({ type: "success", text: "Theme updated successfully!" });
-      // Dispatch custom event to update background dots
-      window.dispatchEvent(new CustomEvent("themeUpdated"));
+      if (result.error) {
+        setMessage({ type: "error", text: result.error });
+      } else {
+        setMessage({ type: "success", text: "Theme updated successfully!" });
+        window.dispatchEvent(new CustomEvent("themeUpdated"));
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Theme form submission failed:", error);
+      setMessage({
+        type: "error",
+        text: "Unable to update the theme. Please try again.",
+      });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   return (

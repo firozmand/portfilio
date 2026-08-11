@@ -2,6 +2,7 @@
 
 import { updateProfile, updateAdminCredentials } from "@/actions/admin";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 type ProfileFormProps = {
@@ -15,6 +16,7 @@ type ProfileFormProps = {
 };
 
 export default function ProfileForm({ profile }: ProfileFormProps) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";
@@ -26,15 +28,25 @@ export default function ProfileForm({ profile }: ProfileFormProps) {
     setLoading(true);
     setMessage(null);
 
-    const formData = new FormData(e.currentTarget);
-    const result = await updateProfile(formData);
+    try {
+      const formData = new FormData(e.currentTarget);
+      const result = await updateProfile(formData);
 
-    if (result.error) {
-      setMessage({ type: "error", text: result.error });
-    } else {
-      setMessage({ type: "success", text: "Profile updated successfully!" });
+      if (result.error) {
+        setMessage({ type: "error", text: result.error });
+      } else {
+        setMessage({ type: "success", text: "Profile updated successfully!" });
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Profile form submission failed:", error);
+      setMessage({
+        type: "error",
+        text: "Unable to update the profile. Please try again.",
+      });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   // Credentials form state
@@ -50,20 +62,31 @@ export default function ProfileForm({ profile }: ProfileFormProps) {
     setCredLoading(true);
     setCredMessage(null);
 
-    const formData = new FormData(e.currentTarget);
-    const result = await updateAdminCredentials(formData);
+    const form = e.currentTarget;
 
-    if (result.error) {
-      setCredMessage({ type: "error", text: result.error });
-    } else {
+    try {
+      const formData = new FormData(form);
+      const result = await updateAdminCredentials(formData);
+
+      if (result.error) {
+        setCredMessage({ type: "error", text: result.error });
+      } else {
+        setCredMessage({
+          type: "success",
+          text: "Credentials updated successfully!",
+        });
+        form.reset();
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Credentials form submission failed:", error);
       setCredMessage({
-        type: "success",
-        text: "Credentials updated successfully!",
+        type: "error",
+        text: "Unable to update the credentials. Please try again.",
       });
-      (e.currentTarget as HTMLFormElement).reset();
+    } finally {
+      setCredLoading(false);
     }
-
-    setCredLoading(false);
   }
 
   return (

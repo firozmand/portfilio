@@ -7,6 +7,9 @@ import Footer from "@/components/Footer";
 
 import SectionWrapper from "@/components/SectionWrapper";
 
+// Admin mutations should be visible immediately without requiring a redeploy.
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <main

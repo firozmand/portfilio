@@ -1,13 +1,13 @@
 import type { Profile, Project, Skill } from "@prisma/client";
 
-const contentDate = new Date("2026-07-05T00:00:00.000Z");
+const contentDate = new Date("2026-08-08T00:00:00.000Z");
 
 export const portfolioProfile: Profile = {
   id: "resume-profile",
   fullName: "Ali Firozmand",
-  shortBio: "Front-End Developer focused on modern, high-performance products.",
+  shortBio: "Front-End Developer | Next.js / React / TypeScript",
   aboutMe:
-    "Front-end developer with 4+ years of experience designing and building modern web applications, management panels, online sales systems, and content platforms. I focus on Next.js, React, and TypeScript, with a strong interest in component architecture, rendering strategy, performance, SEO, clean code, and practical collaboration.",
+    "Front-end developer with 4 years of experience building web applications and admin panels with Next.js, React, and TypeScript. Focused on component architecture, API data management, responsive interfaces, SSR/SSG, performance optimization, SEO, and close collaboration with back-end teams.",
   email: "firozmand.dev@gmail.com",
   resumeUrl: "/resume.pdf",
   createdAt: contentDate,
@@ -18,13 +18,13 @@ export const resumeProjects: (Omit<Project, "techStack"> & {
   techStack: string[];
 })[] = [
   {
-    id: "resume-festivvo",
-    title: "Festivvo",
+    id: "resume-brand-center",
+    title: "Brand Center",
     description:
-      "A modern event and concert ticketing product with responsive purchase journeys, scalable front-end architecture, and a strong focus on performance.",
-    techStack: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
+      "Responsive pages and interactive product structures for a platform connecting brands and influencers, built with reusable components and a strong focus on performance and SEO.",
+    techStack: ["Next.js", "TypeScript", "Tailwind CSS", "SSR"],
     thumbnail: null,
-    liveUrl: "https://festivvo.ir",
+    liveUrl: "https://brndcenter.com",
     githubUrl: null,
     order: 1,
     isVisible: true,
@@ -35,8 +35,8 @@ export const resumeProjects: (Omit<Project, "techStack"> & {
     id: "resume-esanj",
     title: "E-Sanj Test Builder",
     description:
-      "A psychology assessment builder that turns structured data into HTML, CSS, JavaScript, and JSON while keeping complex rendering logic manageable.",
-    techStack: ["Next.js", "JavaScript", "SSR/SSG", "JSON"],
+      "A modular assessment builder that produces HTML, CSS, JavaScript, and JSON output while keeping complex front-end rendering and data flows maintainable.",
+    techStack: ["Next.js", "JavaScript", "HTML/CSS", "JSON"],
     thumbnail: null,
     liveUrl: "https://esanj.ir",
     githubUrl: null,
@@ -46,13 +46,13 @@ export const resumeProjects: (Omit<Project, "techStack"> & {
     updatedAt: contentDate,
   },
   {
-    id: "resume-asgari-holdings",
-    title: "Asgari Holdings",
+    id: "resume-followtel-mock",
+    title: "Followtel Mock",
     description:
-      "The corporate website for Asgari Holdings, shaped around a contemporary visual language, scalable content structure, fast delivery, and SEO.",
-    techStack: ["Next.js", "TypeScript", "Responsive UI", "SEO"],
+      "A mock product environment covering sign-up, login, and administration-panel flows with clear feedback and responsive interactions.",
+    techStack: ["React", "Authentication Flows", "Admin Panel", "Mock API"],
     thumbnail: null,
-    liveUrl: "https://asgariholdings.com",
+    liveUrl: "https://mock.followtel.ir",
     githubUrl: null,
     order: 3,
     isVisible: true,
@@ -60,15 +60,29 @@ export const resumeProjects: (Omit<Project, "techStack"> & {
     updatedAt: contentDate,
   },
   {
-    id: "resume-brand-center",
-    title: "Brand Center",
+    id: "resume-mefaro",
+    title: "Mefaro",
     description:
-      "A multi-surface platform for employers and brands, including profile pages, brand introductions, and structured organizational content.",
-    techStack: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
+      "Front-end collaboration on responsive user interfaces and web pages, with attention to consistent visual structure and usability across screen sizes.",
+    techStack: ["Responsive UI", "Web Interfaces", "Component Design"],
     thumbnail: null,
-    liveUrl: "https://brand-center.org",
+    liveUrl: "https://mefaro.ir",
     githubUrl: null,
     order: 4,
+    isVisible: true,
+    createdAt: contentDate,
+    updatedAt: contentDate,
+  },
+  {
+    id: "resume-directam-ai-panel",
+    title: "Directam AI Panel",
+    description:
+      "Front-end collaboration on the interface and interactive flows of an AI-powered web panel, designed for a focused and practical user experience.",
+    techStack: ["Admin Panel", "Interactive UI", "Responsive Design"],
+    thumbnail: null,
+    liveUrl: "https://ai-panel.directam.ir",
+    githubUrl: null,
+    order: 5,
     isVisible: true,
     createdAt: contentDate,
     updatedAt: contentDate,
@@ -76,22 +90,30 @@ export const resumeProjects: (Omit<Project, "techStack"> & {
 ];
 
 const skills = [
-  ["Next.js", 95, "Frontend"],
-  ["React", 95, "Frontend"],
-  ["TypeScript", 90, "Frontend"],
-  ["JavaScript ES6+", 92, "Frontend"],
-  ["Vue.js", 82, "Frontend"],
-  ["Tailwind CSS", 95, "UI"],
-  ["Sass / SCSS", 84, "UI"],
-  ["Responsive UI", 94, "UI"],
-  ["Redux Toolkit", 88, "State & Data"],
-  ["Zustand", 86, "State & Data"],
-  ["TanStack Query", 88, "State & Data"],
-  ["REST APIs", 90, "State & Data"],
-  ["SSR / SSG / CSR", 90, "Architecture"],
-  ["SEO & Performance", 88, "Architecture"],
-  ["Git / GitLab", 90, "Tools"],
-  ["Docker", 76, "Tools"],
+  ["Next.js", 95, "Core Front-End"],
+  ["React", 95, "Core Front-End"],
+  ["TypeScript", 90, "Core Front-End"],
+  ["JavaScript (ES6+)", 92, "Core Front-End"],
+  ["HTML5", 95, "Core Front-End"],
+  ["CSS3", 95, "Core Front-End"],
+  ["Vue.js", 82, "Core Front-End"],
+  ["Tailwind CSS", 95, "UI Engineering"],
+  ["Responsive Web Design", 94, "UI Engineering"],
+  ["Figma to Code", 88, "UI Engineering"],
+  ["TanStack Query", 88, "State & API"],
+  ["Redux Toolkit", 88, "State & API"],
+  ["Zustand", 86, "State & API"],
+  ["Axios", 90, "State & API"],
+  ["REST API", 90, "State & API"],
+  ["SSR / SSG", 90, "Architecture"],
+  ["Component Architecture", 92, "Architecture"],
+  ["Performance Optimization", 88, "Architecture"],
+  ["SEO", 88, "Architecture"],
+  ["Git", 90, "Engineering Tools"],
+  ["GitHub", 90, "Engineering Tools"],
+  ["GitLab", 90, "Engineering Tools"],
+  ["Docker", 76, "Engineering Tools"],
+  ["ESLint", 88, "Engineering Tools"],
 ] as const;
 
 export const resumeSkills: Skill[] = skills.map(
@@ -108,75 +130,96 @@ export const resumeSkills: Skill[] = skills.map(
 
 export const workExperience = [
   {
-    company: "Festivvo / Asgari Holdings",
+    company: "Brand Center",
+    website: "https://brndcenter.com",
     role: "Front-End Developer",
     period: "Apr 2025 - Present",
     location: "Isfahan, Iran",
     summary:
-      "Building and evolving a connected set of products across ticketing, brand content, and the group corporate website.",
+      "Developing a platform that connects brands and influencers through responsive, reusable, and production-ready interfaces.",
     highlights: [
-      "Delivered modern ticketing, profile, and interactive product flows with Next.js, TypeScript, and Tailwind CSS.",
-      "Improved rendering strategy, responsive behavior, and component architecture for easier long-term growth.",
-      "Collaborated through Git and GitLab with back-end teams and used AI-assisted workflows to shorten delivery cycles.",
+      "Build responsive pages and reusable components with Next.js, TypeScript, and Tailwind CSS.",
+      "Improve routing, SSR, mobile behavior, SEO, and front-end performance.",
+      "Collaborate closely with the back-end team through Git and GitLab workflows.",
     ],
   },
   {
     company: "E-Sanj",
+    website: "https://esanj.ir",
     role: "Front-End Developer",
     period: "Apr 2024 - Mar 2025",
     location: "Tehran, Iran",
     summary:
-      "Worked on a microservice and builder for creating and delivering psychology assessments.",
+      "Worked on a test-builder microservice that generates HTML, CSS, JavaScript, and JSON output for psychology assessments.",
     highlights: [
-      "Built interfaces for composing assessments and producing HTML, CSS, JavaScript, and JSON output.",
-      "Managed complex front-end rendering and data flows with a scalable, maintainable approach.",
-      "Applied advanced Next.js routing, SSR/SSG, performance optimization, and modular architecture.",
+      "Designed modular front-end rendering and data-management flows for complex assessment output.",
+      "Applied Next.js routing, SSR/SSG, and performance optimization in a maintainable architecture.",
     ],
   },
   {
-    company: "Independent / Remote",
+    company: "Remote & Freelance",
+    website: null,
     role: "Front-End Developer",
     period: "Apr 2020 - Nov 2022",
-    location: "Remote",
+    location: "Remote / Tehran",
     summary:
-      "Partnered on web applications, admin panels, and online products including Finomate and several management platforms.",
+      "Delivered web applications and administration panels across remote and freelance collaborations.",
     highlights: [
-      "Implemented production interfaces with React, Next.js, Vue.js, TypeScript, and Tailwind CSS.",
-      "Focused on clean UI, responsive behavior, SEO, speed, and a frictionless user experience.",
+      "Built production interfaces with React, Next.js, Vue.js, TypeScript, and Tailwind CSS.",
+      "Focused on responsive behavior, SEO, speed, clean UI, and practical user experience.",
     ],
   },
 ] as const;
 
 export const skillGroups = [
   {
-    title: "Core front-end",
-    description: "The everyday foundation for production interfaces.",
-    items: ["Next.js", "React", "TypeScript", "JavaScript ES6+", "Vue.js"],
+    title: "Core Front-End",
+    description: "The foundation for production web interfaces.",
+    items: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "JavaScript (ES6+)",
+      "HTML5",
+      "CSS3",
+      "Vue.js",
+    ],
   },
   {
-    title: "UI engineering",
-    description: "Responsive systems with precise, maintainable styling.",
-    items: ["Tailwind CSS", "Sass / SCSS", "Figma", "Responsive UI"],
+    title: "State & API",
+    description: "Predictable client state and API-driven product behavior.",
+    items: ["TanStack Query", "Redux Toolkit", "Zustand", "Axios", "REST API"],
   },
   {
-    title: "State & data",
-    description: "Predictable data flows and API-driven product behavior.",
-    items: ["Redux Toolkit", "Zustand", "TanStack Query", "Axios", "REST APIs"],
+    title: "UI Engineering",
+    description: "Responsive, accessible interfaces built from product designs.",
+    items: ["Tailwind CSS", "Responsive Web Design", "Figma to Code"],
   },
   {
-    title: "Architecture",
-    description: "The less visible work that keeps products fast and healthy.",
-    items: ["SSR / SSG / CSR", "SEO", "Performance", "Git / GitLab", "Docker"],
+    title: "Architecture & Tools",
+    description: "The engineering practices that keep products fast and maintainable.",
+    items: [
+      "SSR / SSG",
+      "Component Architecture",
+      "Performance Optimization",
+      "SEO",
+      "Git",
+      "GitHub",
+      "GitLab",
+      "Docker",
+      "ESLint",
+    ],
   },
 ] as const;
 
 export const personalDetails = {
   location: "Isfahan, Iran",
-  phone: "+98 913 530 3669",
+  phone: "+98 913 570 3669",
+  phoneHref: "tel:+989135703669",
   website: "https://firozmand.ir",
   github: "https://github.com/firozmand",
   linkedin: "https://linkedin.com/in/ali-firozmand-5967411a4",
-  education: "B.Sc. in Software Engineering",
-  university: "Payame Noor University of Tehran",
-  english: "Professional reading and listening (B2)",
+  education: "B.Sc. in Software Engineering, GPA 17/20",
+  university: "Shahid Shamsipour Technical College, Tehran",
+  english: "Reading B2, Listening B2, Writing B1, Speaking B1",
 } as const;

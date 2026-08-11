@@ -2,12 +2,10 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { FiEye, FiEyeOff, FiLock, FiMail, FiShield } from "react-icons/fi";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -27,17 +25,19 @@ export default function LoginPage() {
         email,
         password,
         redirect: false,
+        redirectTo: "/admin",
       });
 
-      if (result?.error) {
+      if (!result?.ok || result.error) {
         setError("Invalid email or password");
-        setLoading(false);
       } else {
-        router.push("/admin");
-        router.refresh();
+        // A document navigation guarantees the newly-issued session cookie is
+        // present when the protected admin route is evaluated.
+        window.location.assign(result.url || "/admin");
       }
     } catch {
       setError("An error occurred. Please try again.");
+    } finally {
       setLoading(false);
     }
   }

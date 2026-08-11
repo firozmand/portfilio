@@ -11,6 +11,18 @@ import {
   resumeSkills,
 } from "./portfolio";
 
+const parseTechStack = (value: string): string[] => {
+  try {
+    const parsed: unknown = JSON.parse(value);
+    return Array.isArray(parsed) &&
+      parsed.every((item) => typeof item === "string")
+      ? parsed
+      : [];
+  } catch {
+    return [];
+  }
+};
+
 // Profile
 export const getProfile = cache(async (): Promise<Profile | null> => {
   if (!prisma) return portfolioProfile;
@@ -40,7 +52,7 @@ export const getProjects = cache(
 
       return projects.map((project) => ({
         ...project,
-        techStack: JSON.parse(project.techStack) as string[],
+        techStack: parseTechStack(project.techStack),
       }));
     } catch (error) {
       console.error("Failed to load project data:", error);
@@ -54,14 +66,19 @@ export const getAllProjects = cache(
     (Omit<Project, "techStack"> & { techStack: string[] })[]
   > => {
     if (!prisma) return []; // No DB available
-    const projects = await prisma.project.findMany({
-      orderBy: { order: "asc" },
-    });
+    try {
+      const projects = await prisma.project.findMany({
+        orderBy: { order: "asc" },
+      });
 
-    return projects.map((project) => ({
-      ...project,
-      techStack: JSON.parse(project.techStack) as string[],
-    }));
+      return projects.map((project) => ({
+        ...project,
+        techStack: parseTechStack(project.techStack),
+      }));
+    } catch (error) {
+      console.error("Failed to load admin project data:", error);
+      return [];
+    }
   }
 );
 
@@ -70,16 +87,21 @@ export const getProjectById = cache(
     id: string
   ): Promise<(Omit<Project, "techStack"> & { techStack: string[] }) | null> => {
     if (!prisma) return null; // No DB available
-    const project = await prisma.project.findUnique({
-      where: { id },
-    });
+    try {
+      const project = await prisma.project.findUnique({
+        where: { id },
+      });
 
-    if (!project) return null;
+      if (!project) return null;
 
-    return {
-      ...project,
-      techStack: JSON.parse(project.techStack) as string[],
-    };
+      return {
+        ...project,
+        techStack: parseTechStack(project.techStack),
+      };
+    } catch (error) {
+      console.error("Failed to load project data:", error);
+      return null;
+    }
   }
 );
 
@@ -95,6 +117,19 @@ export const getSkills = cache(async (): Promise<Skill[]> => {
   } catch (error) {
     console.error("Failed to load skill data:", error);
     return resumeSkills;
+  }
+});
+
+export const getAllSkills = cache(async (): Promise<Skill[]> => {
+  if (!prisma) return [];
+
+  try {
+    return await prisma.skill.findMany({
+      orderBy: { order: "asc" },
+    });
+  } catch (error) {
+    console.error("Failed to load admin skill data:", error);
+    return [];
   }
 });
 

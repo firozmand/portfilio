@@ -1,4 +1,5 @@
 import { getProfile, getSkills } from "@/lib/data";
+import { personalDetails } from "@/lib/portfolio";
 import type { Skill } from "@prisma/client";
 
 // Server component that fetches data at runtime in Node.js environment.
@@ -68,6 +69,29 @@ const About = async () => {
             </p>
           )}
         </div>
+      </div>
+
+      <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        {[
+          ["Location", personalDetails.location],
+          [
+            "Education",
+            `${personalDetails.education} - ${personalDetails.university}`,
+          ],
+          ["English", personalDetails.english],
+        ].map(([label, value]) => (
+          <div
+            key={label}
+            className="glass-panel p-5 shadow-[var(--shadow-soft)]"
+          >
+            <p className="font-mono text-xs uppercase tracking-[0.14em] text-green">
+              {label}
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-[var(--text-primary)]">
+              {value}
+            </p>
+          </div>
+        ))}
       </div>
     </section>
   );

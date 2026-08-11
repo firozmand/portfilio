@@ -27,22 +27,27 @@ export default function SkillForm({ skill }: SkillFormProps) {
     setLoading(true);
     setMessage(null);
 
-    const formData = new FormData(e.currentTarget);
-    const result = skill
-      ? await updateSkill(skill.id, formData)
-      : await createSkill(formData);
+    try {
+      const formData = new FormData(e.currentTarget);
+      const result = skill
+        ? await updateSkill(skill.id, formData)
+        : await createSkill(formData);
 
-    if (result.error) {
-      setMessage({ type: "error", text: result.error });
-      setLoading(false);
-    } else {
+      if (result.error) {
+        setMessage({ type: "error", text: result.error });
+        return;
+      }
+
+      router.replace("/admin/skills");
+      router.refresh();
+    } catch (error) {
+      console.error("Skill form submission failed:", error);
       setMessage({
-        type: "success",
-        text: `Skill ${skill ? "updated" : "created"} successfully!`,
+        type: "error",
+        text: "Unable to save the skill. Please try again.",
       });
-      setTimeout(() => {
-        router.push("/admin/skills");
-      }, 1000);
+    } finally {
+      setLoading(false);
     }
   }
 

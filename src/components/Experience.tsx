@@ -1,4 +1,5 @@
 import { getSkillsByCategory } from "@/lib/data";
+import { workExperience } from "@/lib/portfolio";
 import type { Skill } from "@prisma/client";
 
 // Server component running in Node.js runtime, fetching skills data with fallbacks.
@@ -6,8 +7,6 @@ import type { Skill } from "@prisma/client";
 const Experience = async () => {
   const groupedSkills: Record<string, Skill[]> = await getSkillsByCategory();
   const categories = Object.keys(groupedSkills);
-
-  if (!categories.length) return null;
 
   return (
     <section id="experience" className="py-24">
@@ -19,6 +18,72 @@ const Experience = async () => {
           </h2>
         </div>
         <div className="hidden sm:block h-px w-32 bg-gradient-to-r from-transparent via-[var(--border-strong)] to-transparent" />
+      </div>
+
+      <div className="mb-12 space-y-5">
+        {workExperience.map((experience, index) => (
+          <article
+            key={`${experience.company}-${experience.period}`}
+            className="glass-panel relative overflow-hidden p-6 shadow-[var(--shadow-card)] sm:p-8"
+          >
+            <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-green via-[var(--color-primary)] to-transparent" />
+            <div className="grid gap-5 lg:grid-cols-[0.32fr_0.68fr]">
+              <div>
+                <p className="mb-2 font-mono text-xs uppercase tracking-[0.16em] text-green">
+                  Experience {String(index + 1).padStart(2, "0")}
+                </p>
+                <h3 className="text-xl font-semibold text-[var(--text-primary)]">
+                  {experience.website ? (
+                    <a
+                      href={experience.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="transition-colors hover:text-green"
+                    >
+                      {experience.company}
+                    </a>
+                  ) : (
+                    experience.company
+                  )}
+                </h3>
+                <p className="mt-1 font-medium text-[var(--text-secondary)]">
+                  {experience.role}
+                </p>
+                <p className="mt-3 text-sm text-[var(--text-secondary)]">
+                  {experience.period}
+                </p>
+                <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                  {experience.location}
+                </p>
+              </div>
+
+              <div>
+                <p className="leading-relaxed text-[var(--text-secondary)]">
+                  {experience.summary}
+                </p>
+                <ul className="mt-4 space-y-2.5 text-sm leading-relaxed text-[var(--text-secondary)]">
+                  {experience.highlights.map((highlight) => (
+                    <li key={highlight} className="flex gap-3">
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-green" />
+                      <span>{highlight}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div className="mb-6 flex items-end justify-between gap-4">
+        <div>
+          <p className="font-mono text-xs uppercase tracking-[0.16em] text-green">
+            Technical toolkit
+          </p>
+          <h3 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">
+            Skills used in production
+          </h3>
+        </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
@@ -54,6 +119,12 @@ const Experience = async () => {
           </div>
         ))}
       </div>
+
+      {!categories.length && (
+        <p className="glass-panel p-6 text-[var(--text-secondary)]">
+          Skills will appear here when added.
+        </p>
+      )}
     </section>
   );
 };

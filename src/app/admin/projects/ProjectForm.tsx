@@ -31,22 +31,27 @@ export default function ProjectForm({ project }: ProjectFormProps) {
     setLoading(true);
     setMessage(null);
 
-    const formData = new FormData(e.currentTarget);
-    const result = project
-      ? await updateProject(project.id, formData)
-      : await createProject(formData);
+    try {
+      const formData = new FormData(e.currentTarget);
+      const result = project
+        ? await updateProject(project.id, formData)
+        : await createProject(formData);
 
-    if (result.error) {
-      setMessage({ type: "error", text: result.error });
-      setLoading(false);
-    } else {
+      if (result.error) {
+        setMessage({ type: "error", text: result.error });
+        return;
+      }
+
+      router.replace("/admin/projects");
+      router.refresh();
+    } catch (error) {
+      console.error("Project form submission failed:", error);
       setMessage({
-        type: "success",
-        text: `Project ${project ? "updated" : "created"} successfully!`,
+        type: "error",
+        text: "Unable to save the project. Please try again.",
       });
-      setTimeout(() => {
-        router.push("/admin/projects");
-      }, 1000);
+    } finally {
+      setLoading(false);
     }
   }
 

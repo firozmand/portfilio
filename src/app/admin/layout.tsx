@@ -20,7 +20,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   useEffect(() => {
     async function fetchTheme() {
       try {
-        const response = await fetch("/api/theme");
+        const response = await fetch("/api/theme", { cache: "no-store" });
         if (response.ok) {
           const themeData = await response.json();
           setTheme(themeData);

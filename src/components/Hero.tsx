@@ -1,4 +1,5 @@
 import { getProfile } from "@/lib/data";
+import { personalDetails } from "@/lib/portfolio";
 
 const accentPill = (
   <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border-strong)] bg-[color-mix(in_srgb,var(--color-primary)_12%,transparent)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-green shadow-[var(--shadow-soft)]">
@@ -57,7 +58,8 @@ const Hero = async () => {
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--border-strong)] to-transparent" />
           <div className="grid gap-4">
             <div className="rounded-2xl border border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--color-primary)_10%,transparent)]/40 px-4 py-3 text-sm font-semibold text-[var(--text-primary)]">
-              Crafting interfaces that feel calm, premium, and effortless.
+              Building responsive web applications and admin panels with a
+              focus on architecture, performance, and SEO.
             </div>
             <div className="grid grid-cols-2 gap-4 text-sm text-[var(--text-secondary)]">
               <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface)] p-4">
@@ -76,23 +78,23 @@ const Hero = async () => {
                   Focus
                 </p>
                 <p className="text-[var(--text-primary)] font-semibold">
-                  Front-end craft & product
+                  Next.js, React & TypeScript
                 </p>
               </div>
               <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface)] p-4">
                 <p className="text-xs uppercase tracking-[0.12em] text-secondary">
-                  Approach
+                  Location
                 </p>
                 <p className="text-[var(--text-primary)] font-semibold">
-                  Human, tactile, responsive
+                  {personalDetails.location}
                 </p>
               </div>
               <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface)] p-4">
                 <p className="text-xs uppercase tracking-[0.12em] text-secondary">
-                  Mindset
+                  Experience
                 </p>
                 <p className="text-[var(--text-primary)] font-semibold">
-                  Calm, detail-driven delivery
+                  4 years in front-end development
                 </p>
               </div>
             </div>
