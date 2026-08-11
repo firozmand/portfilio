@@ -27,7 +27,7 @@ const SocialLinks = () => (
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, delay: 1.5 }}
-      className="fixed bottom-0 left-10 hidden flex-col items-center lg:flex"
+      className="side-rail fixed bottom-0 left-10 z-20 flex-col items-center"
     >
       <ul className="flex flex-col items-center space-y-6">
         {socialLinks.map((link) => (
@@ -52,7 +52,7 @@ const SocialLinks = () => (
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, delay: 1.5 }}
-      className="fixed bottom-0 right-10 hidden flex-col items-center lg:flex"
+      className="side-rail fixed bottom-0 right-10 z-20 flex-col items-center"
     >
       <a
         href="mailto:firozmand.dev@gmail.com"

@@ -196,6 +196,39 @@
   }
 }
 
+/*
+ * Side rails need dedicated horizontal gutters. Keep their links in the
+ * footer until both the viewport width and height can accommodate fixed rails
+ * without covering the portfolio content.
+ */
+.side-rail {
+  display: none;
+}
+
+.footer-sociallinks {
+  display: flex;
+}
+
+@media (min-width: 1440px) and (min-height: 640px) {
+  .side-rail {
+    display: flex;
+  }
+
+  .footer-sociallinks {
+    display: none;
+  }
+
+  .portfolio-main {
+    padding-inline: 7rem;
+  }
+}
+
+@media (min-width: 1536px) and (min-height: 640px) {
+  .portfolio-main {
+    padding-inline: 8rem;
+  }
+}
+
 /* Admin night-mode system */
 .admin-wrapper {
   --admin-bg: #040712;

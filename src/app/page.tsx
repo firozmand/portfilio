@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <main
       id="main"
-      className="mx-auto max-w-screen-2xl px-5 sm:px-8 lg:px-12 xl:px-16 pt-32 pb-16 space-y-16"
+      className="portfolio-main mx-auto max-w-screen-2xl space-y-16 px-5 pb-16 pt-32 sm:px-8 lg:px-12 xl:px-16"
     >
       <Hero />
       <SectionWrapper>

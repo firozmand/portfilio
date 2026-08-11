@@ -21,7 +21,7 @@ const links = [
 
 const Footer = () => (
   <footer className="mt-16 flex flex-col items-center gap-4 px-6 pb-10 text-center text-sm text-[var(--text-secondary)]">
-    <div className="flex items-center justify-center gap-4 md:hidden">
+    <div className="footer-sociallinks items-center justify-center gap-4">
       {links.map((link) => (
         <a
           key={link.label}
