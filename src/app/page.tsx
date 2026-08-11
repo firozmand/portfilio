@@ -23,9 +23,9 @@ export default function Home() {
       <SectionWrapper>
         <Experience />
       </SectionWrapper>
-      <SectionWrapper>
-        <Projects />
-      </SectionWrapper>
+      {/* Projects can grow taller than the viewport, so keep this critical
+          content independent from viewport-triggered animation wrappers. */}
+      <Projects />
       <SectionWrapper>
         <Contact />
       </SectionWrapper>
